@@ -1,0 +1,13 @@
+package: github.com/xchapter7x/enaml-concourse-sample
+import:
+- package: github.com/xchapter7x/enaml
+  subpackages:
+  - iaas/vsphere
+- package: github.com/xchapter7x/enaml-concourse-sample
+  subpackages:
+  - deployment/concourse
+  - standard-components/diskpools
+  - standard-components/networks
+  - standard-components/releases
+  - standard-components/resourcepools
+  - standard-components/stemcells
