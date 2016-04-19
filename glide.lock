@@ -1,19 +1,15 @@
 hash: e85c91f7b5707fb73fb8bfa2f4692237b0aceffef72ddcb2542f902099301ebd
-updated: 2016-04-13T10:45:28.452783475-04:00
+updated: 2016-04-18T23:57:50.052358948-04:00
 imports:
 - name: github.com/xchapter7x/enaml
-  version: a90bd94a7b7061f35ae318ea8be0c6307dba65c9
+  version: c718431da457e6634625ddded2af6c1cc33ac495
   subpackages:
   - iaas/vsphere
 - name: github.com/xchapter7x/enaml-concourse-sample
-  version: 5af0a920c366caca3cb2072691a5bf07dbc43540
+  version: c653a6d467988a71d65da6ee0d0444f50a7f6ebb
   subpackages:
   - deployment/concourse
-  - standard-components/diskpools
-  - standard-components/networks
-  - standard-components/releases
-  - standard-components/resourcepools
-  - standard-components/stemcells
+  - releasejobs
 - name: gopkg.in/yaml.v1
   version: 9f9df34309c04878acc86042b16630b0f696e1de
 devImports: []
