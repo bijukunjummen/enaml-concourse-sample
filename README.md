@@ -6,11 +6,11 @@
 manifest
 
 ```
-$ go run main.go vsphere > concourse-deployment.yml
+$ go run main.go > concourse-deployment.yml
 
 or 
 
 # we now have a binary release of our cross iaas deployment manifest
 $ go build main.go -o concourse-deployment
-$ ./concourse-deployment vsphere > concourse-deployment.yml 
+$ ./concourse-deployment > concourse-deployment.yml 
 ```
