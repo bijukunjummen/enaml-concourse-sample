@@ -5,11 +5,6 @@ imports:
   version: c718431da457e6634625ddded2af6c1cc33ac495
   subpackages:
   - iaas/vsphere
-- name: github.com/xchapter7x/enaml-concourse-sample
-  version: c653a6d467988a71d65da6ee0d0444f50a7f6ebb
-  subpackages:
-  - deployment/concourse
-  - releasejobs
 - name: gopkg.in/yaml.v1
   version: 9f9df34309c04878acc86042b16630b0f696e1de
 devImports: []

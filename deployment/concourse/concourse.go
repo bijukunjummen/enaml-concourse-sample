@@ -16,7 +16,10 @@ type Deployment struct {
 	Manifest *enaml.DeploymentManifest
 }
 
-func NewDeployment() (d Deployment) {
+func NewDeployment(webInstances int, url, username, pass string) (d Deployment) {
+	if !isStrongPass(pass) {
+		panic("Sorry. The given password is too weak")
+	}
 	d = Deployment{}
 	d.Manifest = new(enaml.DeploymentManifest)
 	d.Manifest.SetName(DefaultName)
@@ -24,13 +27,13 @@ func NewDeployment() (d Deployment) {
 	d.Manifest.AddReleaseByName("concourse")
 	d.Manifest.AddReleaseByName("garden-linux")
 	d.Manifest.AddStemcellByName("ubuntu-trusty", StemcellAlias)
-	web := enaml.NewInstanceGroup("web", 1, "web", StemcellAlias)
+	web := enaml.NewInstanceGroup("web", insureHAInstanceCount(webInstances), "web", StemcellAlias)
 	web.AddAZ("z1")
 	web.AddNetwork(enaml.InstanceGroupNetwork{"name": "private"})
 	atc := enaml.NewInstanceJob("atc", "concourse", releasejobs.Atc{
-		ExternalUrl:        "something",
-		BasicAuthUsername:  "user",
-		BasicAuthPassword:  "password",
+		ExternalUrl:        url,
+		BasicAuthUsername:  username,
+		BasicAuthPassword:  pass,
 		PostgresqlDatabase: "&atc_db atc",
 	})
 	tsa := enaml.NewInstanceJob("tsa", "concourse", releasejobs.Tsa{})
@@ -42,6 +45,21 @@ func NewDeployment() (d Deployment) {
 	d.Manifest.AddInstanceGroup(db)
 	d.Manifest.AddInstanceGroup(worker)
 	return
+}
+
+func isStrongPass(pass string) (ok bool) {
+	ok = false
+	if len(pass) > 10 {
+		ok = true
+	}
+	return
+}
+
+func insureHAInstanceCount(instances int) int {
+	if instances < 2 {
+		instances = 2
+	}
+	return instances
 }
 
 func (s Deployment) GetDeployment() enaml.DeploymentManifest {
