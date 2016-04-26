@@ -31,15 +31,15 @@ func NewDeployment(webInstances int, url, username, pass string) (d Deployment) 
 	web := enaml.NewInstanceGroup("web", insureHAInstanceCount(webInstances), "web", StemcellAlias)
 	web.AddAZ("z1")
 	web.AddNetwork(enaml.Network{Name: "private"})
-	atc := enaml.NewInstanceJob("atc", "concourse", atc.Atc{
+	atcJob := enaml.NewInstanceJob("atc", "concourse", atc.Atc{
 		ExternalUrl:        url,
 		BasicAuthUsername:  username,
 		BasicAuthPassword:  pass,
 		PostgresqlDatabase: "&atc_db atc",
 	})
-	tsa := enaml.NewInstanceJob("tsa", "concourse", tsa.Tsa{})
-	web.AddJob(atc)
-	web.AddJob(tsa)
+	tsaJob := enaml.NewInstanceJob("tsa", "concourse", tsa.Tsa{})
+	web.AddJob(atcJob)
+	web.AddJob(tsaJob)
 	db := enaml.NewInstanceGroup("db", 1, "database", StemcellAlias)
 	worker := enaml.NewInstanceGroup("worker", 1, "worker", StemcellAlias)
 	d.Manifest.AddInstanceGroup(web)
