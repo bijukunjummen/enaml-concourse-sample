@@ -24,3 +24,7 @@ _testmain.go
 *.prof
 vendor
 .cache
+enaml
+.DS_Store
+concourse.yml
+coverage.out

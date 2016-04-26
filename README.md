@@ -2,17 +2,25 @@
 
 ### please see github.com/xchapter7x/enaml
 
+### generate structs ###
+
+- Concourse
+``` ./enaml generate-jobs https://bosh.io/d/github.com/concourse/concourse?v=1.1.0 ```
+
+- Garden
+``` ./enaml generate-jobs https://bosh.io/d/github.com/cloudfoundry-incubator/garden-linux-release?v=0.337.0 ```
+
 ### this is just an example, not guaranteed to create a usable deployment
 manifest
 
 ```
 $ go run main.go > concourse-deployment.yml
 
-or 
+or
 
 # we now have a binary release of our cross iaas deployment manifest
 $ go build main.go -o concourse-deployment
-$ ./concourse-deployment > concourse-deployment.yml 
+$ ./concourse-deployment > concourse-deployment.yml
 ```
 
 
