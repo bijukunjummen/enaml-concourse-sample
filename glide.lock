@@ -1,8 +1,12 @@
-hash: e85c91f7b5707fb73fb8bfa2f4692237b0aceffef72ddcb2542f902099301ebd
-updated: 2016-04-26T07:39:08.116673527-07:00
+hash: d082a56c6174cb3a13025f6ba3ada7fa904ea6e85be4b27b193dc684ef2eb410
+updated: 2016-04-26T15:22:33.125493116-07:00
 imports:
+- name: github.com/onsi/ginkgo
+  version: 2c2e9bb47b4e44067024f29339588cac8b34dd12
+- name: github.com/onsi/gomega
+  version: 7ce781ea776b2fd506491011353bded2e40c8467
 - name: github.com/xchapter7x/enaml
-  version: f877938605d0b6c28cd31dab0b454511e4680143
+  version: a887e4c154b1e95749361d968c87c5da62b2ebb4
   subpackages:
   - iaas/vsphere
 - name: gopkg.in/yaml.v2

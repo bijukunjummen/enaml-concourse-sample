@@ -3,3 +3,5 @@ import:
 - package: github.com/xchapter7x/enaml
   subpackages:
   - iaas/vsphere
+- package: github.com/onsi/ginkgo
+- package: github.com/onsi/gomega

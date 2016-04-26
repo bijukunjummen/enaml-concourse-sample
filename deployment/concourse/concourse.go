@@ -2,12 +2,12 @@ package concourse
 
 import (
 	"github.com/xchapter7x/enaml"
-	"github.com/xchapter7x/enaml-concourse-sample/releasejobs/atc"
-	"github.com/xchapter7x/enaml-concourse-sample/releasejobs/baggageclaim"
-	"github.com/xchapter7x/enaml-concourse-sample/releasejobs/garden"
-	"github.com/xchapter7x/enaml-concourse-sample/releasejobs/groundcrew"
-	"github.com/xchapter7x/enaml-concourse-sample/releasejobs/postgresql"
-	"github.com/xchapter7x/enaml-concourse-sample/releasejobs/tsa"
+	"github.com/xchapter7x/enaml-concourse-sample/deployment/concourse/enaml-gen/atc"
+	"github.com/xchapter7x/enaml-concourse-sample/deployment/concourse/enaml-gen/baggageclaim"
+	"github.com/xchapter7x/enaml-concourse-sample/deployment/concourse/enaml-gen/garden"
+	"github.com/xchapter7x/enaml-concourse-sample/deployment/concourse/enaml-gen/groundcrew"
+	"github.com/xchapter7x/enaml-concourse-sample/deployment/concourse/enaml-gen/postgresql"
+	"github.com/xchapter7x/enaml-concourse-sample/deployment/concourse/enaml-gen/tsa"
 )
 
 const (
