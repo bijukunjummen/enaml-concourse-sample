@@ -5,9 +5,9 @@ package aws_cpi
 */
 type Nats struct {
 
-	/*Password - Descr: Password to connect to nats with Default: <nil>
+	/*Port - Descr: Port that the nats server listens on Default: 4222
 */
-	Password interface{} `yaml:"password,omitempty"`
+	Port interface{} `yaml:"port,omitempty"`
 
 	/*User - Descr: Username to connect to nats with Default: nats
 */
@@ -17,8 +17,8 @@ type Nats struct {
 */
 	Address interface{} `yaml:"address,omitempty"`
 
-	/*Port - Descr: Port that the nats server listens on Default: 4222
+	/*Password - Descr: Password to connect to nats with Default: <nil>
 */
-	Port interface{} `yaml:"port,omitempty"`
+	Password interface{} `yaml:"password,omitempty"`
 
 }

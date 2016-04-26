@@ -5,9 +5,9 @@ package openstack_cpi
 */
 type Agent struct {
 
-	/*Blobstore - Descr: AWS region for agent used by s3 blobstore plugin Default: <nil>
+	/*Blobstore - Descr: Whether the agent blobstore plugin will always use path style for bucket access Default: <nil>
 */
-	Blobstore Blobstore `yaml:"blobstore,omitempty"`
+	Blobstore *Blobstore `yaml:"blobstore,omitempty"`
 
 	/*Mbus - Descr: Message bus endpoint for the agent to start accepting agent requests Default: <nil>
 */

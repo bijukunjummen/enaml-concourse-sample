@@ -5,16 +5,16 @@ package openstack_cpi
 */
 type Env struct {
 
-	/*NoProxy - Descr: No proxy environment variable Default: <nil>
+	/*HttpProxy - Descr: Http proxy to connect to cloud API's Default: <nil>
 */
-	NoProxy interface{} `yaml:"no_proxy,omitempty"`
+	HttpProxy interface{} `yaml:"http_proxy,omitempty"`
 
 	/*HttpsProxy - Descr: Https proxy to connect to cloud API's Default: <nil>
 */
 	HttpsProxy interface{} `yaml:"https_proxy,omitempty"`
 
-	/*HttpProxy - Descr: Http proxy to connect to cloud API's Default: <nil>
+	/*NoProxy - Descr: No proxy environment variable Default: <nil>
 */
-	HttpProxy interface{} `yaml:"http_proxy,omitempty"`
+	NoProxy interface{} `yaml:"no_proxy,omitempty"`
 
 }

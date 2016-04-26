@@ -5,17 +5,37 @@ package aws_cpi
 */
 type Aws struct {
 
-	/*ConnectionOptions - Descr: All required custom CA certificates Default: <nil>
+	/*DefaultKeyName - Descr: Default SSH keypair used for new VMs (required) Default: <nil>
 */
-	ConnectionOptions ConnectionOptions `yaml:"connection_options,omitempty"`
+	DefaultKeyName interface{} `yaml:"default_key_name,omitempty"`
+
+	/*AccessKeyId - Descr: AWS access_key_id for the aws cpi (Required when aws.credentials_source is set to `static`) Default: <nil>
+*/
+	AccessKeyId interface{} `yaml:"access_key_id,omitempty"`
+
+	/*Ec2Endpoint - Descr: AWS EC2 service endpoint, without protocol/scheme (Optional: default endpoint will be constructed from region if not specified) Default: <nil>
+*/
+	Ec2Endpoint interface{} `yaml:"ec2_endpoint,omitempty"`
 
 	/*CredentialsSource - Descr: Where to get AWS credentials for the aws cpi. This can be set to `static` to use an `access_key_id` and `secret_access_key` or `env_or_profile` to get the credentials from environment variables or an EC2 instance profile. Default: static
 */
 	CredentialsSource interface{} `yaml:"credentials_source,omitempty"`
 
-	/*Ec2Endpoint - Descr: AWS EC2 service endpoint, without protocol/scheme (Optional: default endpoint will be constructed from region if not specified) Default: <nil>
+	/*DefaultSecurityGroups - Descr: Default security groups for new VMs (required) Default: <nil>
 */
-	Ec2Endpoint interface{} `yaml:"ec2_endpoint,omitempty"`
+	DefaultSecurityGroups interface{} `yaml:"default_security_groups,omitempty"`
+
+	/*ConnectionOptions - Descr: All required custom CA certificates Default: <nil>
+*/
+	ConnectionOptions *ConnectionOptions `yaml:"connection_options,omitempty"`
+
+	/*MaxRetries - Descr: The maximum number of times AWS service errors and throttling errors should be retried. There is an exponential backoff in between retries, so the more retries the longer it can take to fail. Default: 8
+*/
+	MaxRetries interface{} `yaml:"max_retries,omitempty"`
+
+	/*Region - Descr: AWS region name (Required unless both ec2_endpoint and elb_endpoint are specified) Default: <nil>
+*/
+	Region interface{} `yaml:"region,omitempty"`
 
 	/*ElbEndpoint - Descr: AWS ELB service endpoint, without protocol/scheme (Optional: default endpoint will be constructed from region if not specified) Default: <nil>
 */
@@ -23,34 +43,14 @@ type Aws struct {
 
 	/*Stemcell - Descr: AWS kernel id used by aws cpi Default: <nil>
 */
-	Stemcell Stemcell `yaml:"stemcell,omitempty"`
-
-	/*DefaultIamInstanceProfile - Descr: Default AWS iam_instance_profile for the aws cpi Default: <nil>
-*/
-	DefaultIamInstanceProfile interface{} `yaml:"default_iam_instance_profile,omitempty"`
-
-	/*AccessKeyId - Descr: AWS access_key_id for the aws cpi (Required when aws.credentials_source is set to `static`) Default: <nil>
-*/
-	AccessKeyId interface{} `yaml:"access_key_id,omitempty"`
-
-	/*DefaultKeyName - Descr: Default SSH keypair used for new VMs (required) Default: <nil>
-*/
-	DefaultKeyName interface{} `yaml:"default_key_name,omitempty"`
-
-	/*Region - Descr: AWS region name (Required unless both ec2_endpoint and elb_endpoint are specified) Default: <nil>
-*/
-	Region interface{} `yaml:"region,omitempty"`
-
-	/*DefaultSecurityGroups - Descr: Default security groups for new VMs (required) Default: <nil>
-*/
-	DefaultSecurityGroups interface{} `yaml:"default_security_groups,omitempty"`
-
-	/*MaxRetries - Descr: The maximum number of times AWS service errors and throttling errors should be retried. There is an exponential backoff in between retries, so the more retries the longer it can take to fail. Default: 8
-*/
-	MaxRetries interface{} `yaml:"max_retries,omitempty"`
+	Stemcell *Stemcell `yaml:"stemcell,omitempty"`
 
 	/*SecretAccessKey - Descr: AWS secret_access_key for the aws cpi (Required when aws.credentials_source is set to `static`) Default: <nil>
 */
 	SecretAccessKey interface{} `yaml:"secret_access_key,omitempty"`
+
+	/*DefaultIamInstanceProfile - Descr: Default AWS iam_instance_profile for the aws cpi Default: <nil>
+*/
+	DefaultIamInstanceProfile interface{} `yaml:"default_iam_instance_profile,omitempty"`
 
 }

@@ -5,25 +5,45 @@ package aws_cpi
 */
 type Blobstore struct {
 
-	/*BucketName - Descr: AWS S3 Bucket used by s3 blobstore plugin Default: <nil>
+	/*Port - Descr: Port of blobstore server used by simple blobstore plugin Default: 25250
 */
-	BucketName interface{} `yaml:"bucket_name,omitempty"`
+	Port interface{} `yaml:"port,omitempty"`
 
-	/*Provider - Descr: Provider of the blobstore used by director and agent (dav|simple|s3) Default: dav
+	/*Host - Descr: Host of agent blobstore server used by simple blobstore plugin Default: <nil>
 */
-	Provider interface{} `yaml:"provider,omitempty"`
+	Host interface{} `yaml:"host,omitempty"`
 
 	/*S3ForcePathStyle - Descr: Whether the agent blobstore plugin will always use path style for bucket access Default: <nil>
 */
 	S3ForcePathStyle interface{} `yaml:"s3_force_path_style,omitempty"`
 
+	/*Address - Descr: Address for agent to connect to blobstore server used by simple blobstore plugin Default: <nil>
+*/
+	Address interface{} `yaml:"address,omitempty"`
+
 	/*S3Port - Descr: Port of agent blobstore server used by s3 blobstore plugin Default: <nil>
 */
 	S3Port interface{} `yaml:"s3_port,omitempty"`
 
-	/*Address - Descr: Address for agent to connect to blobstore server used by simple blobstore plugin Default: <nil>
+	/*BucketName - Descr: AWS S3 Bucket used by s3 blobstore plugin Default: <nil>
 */
-	Address interface{} `yaml:"address,omitempty"`
+	BucketName interface{} `yaml:"bucket_name,omitempty"`
+
+	/*S3MultipartThreshold - Descr: Agent blobstore threshold for multipart uploads Default: <nil>
+*/
+	S3MultipartThreshold interface{} `yaml:"s3_multipart_threshold,omitempty"`
+
+	/*S3SignatureVersion - Descr: Signature version used to connect to an s3 blobstore Default: <nil>
+*/
+	S3SignatureVersion interface{} `yaml:"s3_signature_version,omitempty"`
+
+	/*S3Region - Descr: AWS region for agent used by s3 blobstore plugin (Required when blobstore.credentials_source is set to `static`) Default: <nil>
+*/
+	S3Region interface{} `yaml:"s3_region,omitempty"`
+
+	/*Path - Descr: local blobstore path Default: <nil>
+*/
+	Path interface{} `yaml:"path,omitempty"`
 
 	/*AccessKeyId - Descr: AWS access_key_id for agent used by s3 blobstore plugin (Required when blobstore.credentials_source is set to `static`) Default: <nil>
 */
@@ -33,44 +53,24 @@ type Blobstore struct {
 */
 	SslVerifyPeer interface{} `yaml:"ssl_verify_peer,omitempty"`
 
-	/*SecretAccessKey - Descr: AWS secret_access_key for agent used by s3 blobstore plugin (Required when blobstore.credentials_source is set to `static`) Default: <nil>
+	/*Agent - Descr: Password agent uses to connect to blobstore used by simple blobstore plugin Default: <nil>
 */
-	SecretAccessKey interface{} `yaml:"secret_access_key,omitempty"`
-
-	/*Host - Descr: Host of agent blobstore server used by simple blobstore plugin Default: <nil>
-*/
-	Host interface{} `yaml:"host,omitempty"`
-
-	/*Agent - Descr: Username agent uses to connect to blobstore used by simple blobstore plugin Default: <nil>
-*/
-	Agent Agent `yaml:"agent,omitempty"`
-
-	/*S3Region - Descr: AWS region for agent used by s3 blobstore plugin (Required when blobstore.credentials_source is set to `static`) Default: <nil>
-*/
-	S3Region interface{} `yaml:"s3_region,omitempty"`
+	Agent *Agent `yaml:"agent,omitempty"`
 
 	/*UseSsl - Descr: Whether the agent blobstore plugin should use SSL to connect to the blobstore server Default: <nil>
 */
 	UseSsl interface{} `yaml:"use_ssl,omitempty"`
 
-	/*Port - Descr: Port of blobstore server used by simple blobstore plugin Default: 25250
+	/*Provider - Descr: Provider of the blobstore used by director and agent (dav|simple|s3) Default: dav
 */
-	Port interface{} `yaml:"port,omitempty"`
-
-	/*S3SignatureVersion - Descr: Signature version used to connect to an s3 blobstore Default: <nil>
-*/
-	S3SignatureVersion interface{} `yaml:"s3_signature_version,omitempty"`
-
-	/*Path - Descr: local blobstore path Default: <nil>
-*/
-	Path interface{} `yaml:"path,omitempty"`
+	Provider interface{} `yaml:"provider,omitempty"`
 
 	/*CredentialsSource - Descr: Where to get AWS credentials for the aws cpi. This can be set to `static` for to use an `access_key_id` and `secret_access_key` or `env_or_profile` to get the credentials from environment variables or an EC2 instance profile. Default: <nil>
 */
 	CredentialsSource interface{} `yaml:"credentials_source,omitempty"`
 
-	/*S3MultipartThreshold - Descr: Agent blobstore threshold for multipart uploads Default: <nil>
+	/*SecretAccessKey - Descr: AWS secret_access_key for agent used by s3 blobstore plugin (Required when blobstore.credentials_source is set to `static`) Default: <nil>
 */
-	S3MultipartThreshold interface{} `yaml:"s3_multipart_threshold,omitempty"`
+	SecretAccessKey interface{} `yaml:"secret_access_key,omitempty"`
 
 }

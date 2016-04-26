@@ -5,24 +5,24 @@ package aws_cpi
 */
 type Agent struct {
 
-	/*Password - Descr: Password agent uses to connect to blobstore used by simple blobstore plugin Default: <nil>
-*/
-	Password interface{} `yaml:"password,omitempty"`
-
 	/*User - Descr: Username agent uses to connect to blobstore used by simple blobstore plugin Default: <nil>
 */
 	User interface{} `yaml:"user,omitempty"`
 
-	/*Blobstore - Descr: Agent blobstore threshold for multipart uploads Default: <nil>
+	/*Password - Descr: Password agent uses to connect to blobstore used by simple blobstore plugin Default: <nil>
 */
-	Blobstore Blobstore `yaml:"blobstore,omitempty"`
+	Password interface{} `yaml:"password,omitempty"`
+
+	/*Blobstore - Descr: Signature version used to connect to an s3 blobstore Default: <nil>
+*/
+	Blobstore *Blobstore `yaml:"blobstore,omitempty"`
+
+	/*Nats - Descr: Address of the nats server Default: <nil>
+*/
+	Nats *Nats `yaml:"nats,omitempty"`
 
 	/*Mbus - Descr: Agent mbus Default: <nil>
 */
 	Mbus interface{} `yaml:"mbus,omitempty"`
-
-	/*Nats - Descr: Address of the nats server Default: <nil>
-*/
-	Nats Nats `yaml:"nats,omitempty"`
 
 }

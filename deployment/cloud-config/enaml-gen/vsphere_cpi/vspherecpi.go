@@ -5,28 +5,28 @@ package vsphere_cpi
 */
 type VsphereCpi struct {
 
-	/*Blobstore - Descr: Password agent uses to connect to blobstore used by simple blobstore plugin Default: <nil>
-*/
-	Blobstore Blobstore `yaml:"blobstore,omitempty"`
-
-	/*Env - Descr: No Proxy environment variable Default: <nil>
-*/
-	Env Env `yaml:"env,omitempty"`
-
-	/*Nats - Descr: Address of the nats server Default: <nil>
-*/
-	Nats Nats `yaml:"nats,omitempty"`
-
-	/*Vcenter - Descr: Password to connect to vCenter server used by vspher cpi Default: <nil>
-*/
-	Vcenter Vcenter `yaml:"vcenter,omitempty"`
-
 	/*Ntp - Descr: List of ntp server IPs. pool.ntp.org attempts to return IPs closest to your location, but you can still specify if needed. Default: [0.pool.ntp.org 1.pool.ntp.org]
 */
 	Ntp interface{} `yaml:"ntp,omitempty"`
 
-	/*Agent - Descr: Signature version used to connect to an s3 blobstore Default: <nil>
+	/*Env - Descr: Http proxy to connect to cloud API's Default: <nil>
 */
-	Agent Agent `yaml:"agent,omitempty"`
+	Env *Env `yaml:"env,omitempty"`
+
+	/*Vcenter - Descr: Address of vCenter server used by vsphere cpi Default: <nil>
+*/
+	Vcenter *Vcenter `yaml:"vcenter,omitempty"`
+
+	/*Agent - Descr: Address for agent to connect to blobstore server used by simple blobstore plugin Default: <nil>
+*/
+	Agent *Agent `yaml:"agent,omitempty"`
+
+	/*Blobstore - Descr: Provider of the blobstore used by director and agent (dav|simple|s3) Default: dav
+*/
+	Blobstore *Blobstore `yaml:"blobstore,omitempty"`
+
+	/*Nats - Descr: Username to connect to nats with Default: nats
+*/
+	Nats *Nats `yaml:"nats,omitempty"`
 
 }

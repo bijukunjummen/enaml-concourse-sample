@@ -5,49 +5,45 @@ package openstack_cpi
 */
 type Blobstore struct {
 
-	/*BucketName - Descr: S3 Bucket used by s3 blobstore plugin Default: <nil>
-*/
-	BucketName interface{} `yaml:"bucket_name,omitempty"`
-
 	/*S3Port - Descr: Port of agent blobstore server used by s3 blobstore plugin Default: <nil>
 */
 	S3Port interface{} `yaml:"s3_port,omitempty"`
 
-	/*SslVerifyPeer - Descr: Whether the agent blobstore plugin should verify its peer when using SSL Default: <nil>
+	/*UseSsl - Descr: Whether the agent blobstore plugin should use SSL to connect to the blobstore server Default: <nil>
 */
-	SslVerifyPeer interface{} `yaml:"ssl_verify_peer,omitempty"`
+	UseSsl interface{} `yaml:"use_ssl,omitempty"`
 
-	/*S3SignatureVersion - Descr: Signature version used to connect to an s3 blobstore Default: <nil>
+	/*BucketName - Descr: S3 Bucket used by s3 blobstore plugin Default: <nil>
 */
-	S3SignatureVersion interface{} `yaml:"s3_signature_version,omitempty"`
+	BucketName interface{} `yaml:"bucket_name,omitempty"`
 
-	/*Address - Descr: Address for agent to connect to blobstore server used by simple blobstore plugin Default: <nil>
+	/*Path - Descr: Path used by 'local' blobstore plugin Default: <nil>
 */
-	Address interface{} `yaml:"address,omitempty"`
-
-	/*Port - Descr: Port for agent to connect to blobstore server used by 'simple' blobstore plugin Default: <nil>
-*/
-	Port interface{} `yaml:"port,omitempty"`
-
-	/*AccessKeyId - Descr: access_key_id for agent used by s3 blobstore plugin Default: <nil>
-*/
-	AccessKeyId interface{} `yaml:"access_key_id,omitempty"`
-
-	/*S3Region - Descr: AWS region for agent used by s3 blobstore plugin Default: <nil>
-*/
-	S3Region interface{} `yaml:"s3_region,omitempty"`
+	Path interface{} `yaml:"path,omitempty"`
 
 	/*S3MultipartThreshold - Descr: Agent blobstore threshold for multipart uploads Default: <nil>
 */
 	S3MultipartThreshold interface{} `yaml:"s3_multipart_threshold,omitempty"`
 
+	/*Address - Descr: Address for agent to connect to blobstore server used by simple blobstore plugin Default: <nil>
+*/
+	Address interface{} `yaml:"address,omitempty"`
+
+	/*Provider - Descr: Provider of the blobstore used by director and agent (simple|local) Default: <nil>
+*/
+	Provider interface{} `yaml:"provider,omitempty"`
+
+	/*Host - Descr: Host of agent blobstore server used by simple blobstore plugin Default: <nil>
+*/
+	Host interface{} `yaml:"host,omitempty"`
+
 	/*Agent - Descr: Username agent uses to connect to blobstore used by 'simple' blobstore plugin Default: <nil>
 */
-	Agent Agent `yaml:"agent,omitempty"`
+	Agent *Agent `yaml:"agent,omitempty"`
 
-	/*UseSsl - Descr: Whether the agent blobstore plugin should use SSL to connect to the blobstore server Default: <nil>
+	/*SslVerifyPeer - Descr: Whether the agent blobstore plugin should verify its peer when using SSL Default: <nil>
 */
-	UseSsl interface{} `yaml:"use_ssl,omitempty"`
+	SslVerifyPeer interface{} `yaml:"ssl_verify_peer,omitempty"`
 
 	/*S3ForcePathStyle - Descr: Whether the agent blobstore plugin will always use path style for bucket access Default: <nil>
 */
@@ -57,16 +53,20 @@ type Blobstore struct {
 */
 	SecretAccessKey interface{} `yaml:"secret_access_key,omitempty"`
 
-	/*Path - Descr: Path used by 'local' blobstore plugin Default: <nil>
+	/*S3Region - Descr: AWS region for agent used by s3 blobstore plugin Default: <nil>
 */
-	Path interface{} `yaml:"path,omitempty"`
+	S3Region interface{} `yaml:"s3_region,omitempty"`
 
-	/*Provider - Descr: Provider of the blobstore used by director and agent (simple|local) Default: <nil>
+	/*AccessKeyId - Descr: access_key_id for agent used by s3 blobstore plugin Default: <nil>
 */
-	Provider interface{} `yaml:"provider,omitempty"`
+	AccessKeyId interface{} `yaml:"access_key_id,omitempty"`
 
-	/*Host - Descr: Host of agent blobstore server used by simple blobstore plugin Default: <nil>
+	/*S3SignatureVersion - Descr: Signature version used to connect to an s3 blobstore Default: <nil>
 */
-	Host interface{} `yaml:"host,omitempty"`
+	S3SignatureVersion interface{} `yaml:"s3_signature_version,omitempty"`
+
+	/*Port - Descr: Port for agent to connect to blobstore server used by 'simple' blobstore plugin Default: <nil>
+*/
+	Port interface{} `yaml:"port,omitempty"`
 
 }

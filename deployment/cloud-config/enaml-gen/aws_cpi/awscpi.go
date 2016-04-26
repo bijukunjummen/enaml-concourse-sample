@@ -5,9 +5,21 @@ package aws_cpi
 */
 type AwsCpi struct {
 
-	/*Env - Descr: Https proxy to connect to cloud API's Default: <nil>
+	/*Blobstore - Descr: AWS access_key_id used by s3 blobstore plugin (Required when blobstore.credentials_source is set to `static`) Default: <nil>
 */
-	Env Env `yaml:"env,omitempty"`
+	Blobstore *Blobstore `yaml:"blobstore,omitempty"`
+
+	/*Nats - Descr: Password to connect to nats with Default: <nil>
+*/
+	Nats *Nats `yaml:"nats,omitempty"`
+
+	/*Env - Descr: No proxy environment variable Default: <nil>
+*/
+	Env *Env `yaml:"env,omitempty"`
+
+	/*Agent - Descr: Signature version used to connect to an s3 blobstore Default: <nil>
+*/
+	Agent *Agent `yaml:"agent,omitempty"`
 
 	/*Ntp - Descr: List of ntp server IPs. pool.ntp.org attempts to return IPs closest to your location, but you can still specify if needed. Default: [0.pool.ntp.org 1.pool.ntp.org]
 */
@@ -15,22 +27,10 @@ type AwsCpi struct {
 
 	/*Aws - Descr: AWS kernel id used by aws cpi Default: <nil>
 */
-	Aws Aws `yaml:"aws,omitempty"`
+	Aws *Aws `yaml:"aws,omitempty"`
 
-	/*Agent - Descr: Address of the nats server Default: <nil>
+	/*Registry - Descr: Address of the Registry to connect to Default: <nil>
 */
-	Agent Agent `yaml:"agent,omitempty"`
-
-	/*Blobstore - Descr: Host of blobstore server used by simple blobstore plugin Default: <nil>
-*/
-	Blobstore Blobstore `yaml:"blobstore,omitempty"`
-
-	/*Registry - Descr: Password to access the Registry Default: <nil>
-*/
-	Registry Registry `yaml:"registry,omitempty"`
-
-	/*Nats - Descr: Port that the nats server listens on Default: 4222
-*/
-	Nats Nats `yaml:"nats,omitempty"`
+	Registry *Registry `yaml:"registry,omitempty"`
 
 }

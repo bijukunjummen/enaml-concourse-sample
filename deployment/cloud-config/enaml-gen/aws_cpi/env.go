@@ -5,13 +5,13 @@ package aws_cpi
 */
 type Env struct {
 
-	/*HttpsProxy - Descr: Https proxy to connect to cloud API's Default: <nil>
-*/
-	HttpsProxy interface{} `yaml:"https_proxy,omitempty"`
-
 	/*NoProxy - Descr: No proxy environment variable Default: <nil>
 */
 	NoProxy interface{} `yaml:"no_proxy,omitempty"`
+
+	/*HttpsProxy - Descr: Https proxy to connect to cloud API's Default: <nil>
+*/
+	HttpsProxy interface{} `yaml:"https_proxy,omitempty"`
 
 	/*HttpProxy - Descr: Http proxy to connect to cloud API's Default: <nil>
 */

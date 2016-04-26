@@ -5,20 +5,20 @@ package openstack_cpi
 */
 type Nats struct {
 
-	/*Password - Descr: NATS password used by agent to subscribe to agent requests Default: <nil>
+	/*Address - Descr: NATS address used by agent to subscribe to agent requests Default: <nil>
 */
-	Password interface{} `yaml:"password,omitempty"`
-
-	/*User - Descr: NATS username used by agent to subscribe to agent requests Default: <nil>
-*/
-	User interface{} `yaml:"user,omitempty"`
+	Address interface{} `yaml:"address,omitempty"`
 
 	/*Port - Descr: NATS port used by agent to subscribe to agent requests Default: 4222
 */
 	Port interface{} `yaml:"port,omitempty"`
 
-	/*Address - Descr: NATS address used by agent to subscribe to agent requests Default: <nil>
+	/*User - Descr: NATS username used by agent to subscribe to agent requests Default: <nil>
 */
-	Address interface{} `yaml:"address,omitempty"`
+	User interface{} `yaml:"user,omitempty"`
+
+	/*Password - Descr: NATS password used by agent to subscribe to agent requests Default: <nil>
+*/
+	Password interface{} `yaml:"password,omitempty"`
 
 }

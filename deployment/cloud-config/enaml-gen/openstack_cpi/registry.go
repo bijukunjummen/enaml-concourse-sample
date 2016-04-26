@@ -5,13 +5,13 @@ package openstack_cpi
 */
 type Registry struct {
 
+	/*Password - Descr: Password to access the Registry Default: <nil>
+*/
+	Password interface{} `yaml:"password,omitempty"`
+
 	/*Endpoint - Descr: Full URL for the registry endpoint that may include basic auth credentials Default: <nil>
 */
 	Endpoint interface{} `yaml:"endpoint,omitempty"`
-
-	/*Host - Descr: Address of the Registry to connect to (required) Default: <nil>
-*/
-	Host interface{} `yaml:"host,omitempty"`
 
 	/*Username - Descr: Username to access the Registry Default: <nil>
 */
@@ -21,8 +21,8 @@ type Registry struct {
 */
 	Port interface{} `yaml:"port,omitempty"`
 
-	/*Password - Descr: Password to access the Registry Default: <nil>
+	/*Host - Descr: Address of the Registry to connect to (required) Default: <nil>
 */
-	Password interface{} `yaml:"password,omitempty"`
+	Host interface{} `yaml:"host,omitempty"`
 
 }
