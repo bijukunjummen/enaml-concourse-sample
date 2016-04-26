@@ -2,7 +2,8 @@ package concourse
 
 import (
 	"github.com/xchapter7x/enaml"
-	"github.com/xchapter7x/enaml-concourse-sample/releasejobs"
+	"github.com/xchapter7x/enaml-concourse-sample/deployment/concourse/enaml-gen/atc"
+	"github.com/xchapter7x/enaml-concourse-sample/deployment/concourse/enaml-gen/tsa"
 )
 
 var (
@@ -29,14 +30,14 @@ func NewDeployment(webInstances int, url, username, pass string) (d Deployment) 
 	d.Manifest.AddStemcellByName("ubuntu-trusty", StemcellAlias)
 	web := enaml.NewInstanceGroup("web", insureHAInstanceCount(webInstances), "web", StemcellAlias)
 	web.AddAZ("z1")
-	web.AddNetwork(enaml.InstanceGroupNetwork{"name": "private"})
-	atc := enaml.NewInstanceJob("atc", "concourse", releasejobs.Atc{
+	web.AddNetwork(enaml.Network{Name: "private"})
+	atc := enaml.NewInstanceJob("atc", "concourse", atc.Atc{
 		ExternalUrl:        url,
 		BasicAuthUsername:  username,
 		BasicAuthPassword:  pass,
 		PostgresqlDatabase: "&atc_db atc",
 	})
-	tsa := enaml.NewInstanceJob("tsa", "concourse", releasejobs.Tsa{})
+	tsa := enaml.NewInstanceJob("tsa", "concourse", tsa.Tsa{})
 	web.AddJob(atc)
 	web.AddJob(tsa)
 	db := enaml.NewInstanceGroup("db", 1, "database", StemcellAlias)
