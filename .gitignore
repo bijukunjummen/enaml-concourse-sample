@@ -24,3 +24,5 @@ _testmain.go
 *.prof
 vendor
 .cache
+cmd/cloud-config/cloud-config
+cmd/concourse/concourse
