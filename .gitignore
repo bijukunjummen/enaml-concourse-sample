@@ -29,4 +29,7 @@ cmd/concourse/concourse
 enaml
 concourse.yml
 coverage.out
+cover.out
 .DS_Store
+cover.html
+testCoverage

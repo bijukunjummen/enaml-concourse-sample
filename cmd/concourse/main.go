@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 	"strconv"
 	"strings"
@@ -39,8 +40,10 @@ func main() {
 		deployment.WorkerAZs = strings.Split(workerAzs, ",")
 	}
 
+	var yamlString string
 	if err := deployment.Initialize(); err == nil {
-		enaml.Paint(deployment)
+		yamlString, err = enaml.Paint(deployment)
+		fmt.Println(yamlString)
 	} else {
 		panic(err.Error())
 	}

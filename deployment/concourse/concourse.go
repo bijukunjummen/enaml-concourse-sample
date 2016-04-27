@@ -1,6 +1,8 @@
 package concourse
 
 import (
+	"fmt"
+
 	"github.com/xchapter7x/enaml"
 	"github.com/xchapter7x/enaml-concourse-sample/deployment/concourse/enaml-gen/atc"
 	"github.com/xchapter7x/enaml-concourse-sample/deployment/concourse/enaml-gen/baggageclaim"
@@ -35,6 +37,7 @@ type Deployment struct {
 	NetworkGateway    string
 	StemcellAlias     string
 	PostgresPassword  string
+	ResourcePoolName  string
 }
 
 //NewDeployment -
@@ -50,13 +53,15 @@ func NewDeployment() (d Deployment) {
 
 //Initialize -
 func (d *Deployment) Initialize() (err error) {
-	var resourcePoolName = ""
 
 	//TODO Add validations to provide feedback on invalid property configuration
 	/*if !d.isStrongPass(d.ConcoursePassword) {
 		err = fmt.Errorf("Sorry. The given password is too weak")
 	}*/
 
+	var web *enaml.InstanceGroup
+	var db *enaml.InstanceGroup
+	var worker *enaml.InstanceGroup
 	d.manifest.SetName(d.DeploymentName)
 	d.manifest.SetDirectorUUID(d.DirectorUUID)
 	d.manifest.AddReleaseByName(concourseReleaseName)
@@ -67,7 +72,7 @@ func (d *Deployment) Initialize() (err error) {
 	} else {
 		resourcePool := d.CreateResourcePool(d.NetworkName)
 		d.manifest.AddResourcePool(resourcePool)
-		resourcePoolName = resourcePool.Name
+		d.ResourcePoolName = resourcePool.Name
 
 		compilation := d.CreateCompilation(d.NetworkName)
 		d.manifest.SetCompilation(compilation)
@@ -79,93 +84,155 @@ func (d *Deployment) Initialize() (err error) {
 	update := d.CreateUpdate()
 	d.manifest.SetUpdate(update)
 
-	web := d.CreateWebInstanceGroup(resourcePoolName)
+	if web, err = d.CreateWebInstanceGroup(); err != nil {
+		return
+	}
 	d.manifest.AddInstanceGroup(web)
 
-	db := d.CreateDatabaseInstanceGroup(resourcePoolName)
+	if db, err = d.CreateDatabaseInstanceGroup(); err != nil {
+		return
+	}
 	d.manifest.AddInstanceGroup(db)
 
-	worker := d.CreateWorkerInstanceGroup(resourcePoolName)
+	if worker, err = d.CreateWorkerInstanceGroup(); err != nil {
+		return
+	}
 	d.manifest.AddInstanceGroup(worker)
 
 	return
 }
 
 //CreateWebInstanceGroup -
-func (d *Deployment) CreateWebInstanceGroup(resourcePoolName string) (web *enaml.InstanceGroup) {
-	web = &enaml.InstanceGroup{
-		Name:         "web",
-		Instances:    d.WebInstances,
-		ResourcePool: resourcePoolName,
-		VMType:       "web",
-		AZs:          d.WebAZs,
-		Stemcell:     d.StemcellAlias,
+func (d *Deployment) CreateWebInstanceGroup() (web *enaml.InstanceGroup, err error) {
+	if err = validateInstanceGroup(d.ResourcePoolName, d.StemcellAlias, "WebAZs", d.WebAZs); err == nil {
+		web = &enaml.InstanceGroup{
+			Name:         "web",
+			Instances:    d.WebInstances,
+			ResourcePool: d.ResourcePoolName,
+			VMType:       "web",
+			AZs:          d.WebAZs,
+			Stemcell:     d.StemcellAlias,
+		}
+		web.AddNetwork(enaml.Network{
+			Name:      d.NetworkName,
+			StaticIPs: d.WebIPs,
+		})
+		web.AddJob(d.CreateAtcJob())
+		web.AddJob(d.CreateTsaJob())
 	}
-	web.AddNetwork(enaml.Network{
-		Name:      d.NetworkName,
-		StaticIPs: d.WebIPs,
-	})
-	atc := enaml.NewInstanceJob("atc", concourseReleaseName, atc.Atc{
+	return
+}
+
+//CreateAtcJob -
+func (d *Deployment) CreateAtcJob() (job *enaml.InstanceJob) {
+	job = enaml.NewInstanceJob("atc", concourseReleaseName, atc.Atc{
 		ExternalUrl:        d.ConcourseURL,
 		BasicAuthUsername:  d.ConcourseUserName,
 		BasicAuthPassword:  d.ConcoursePassword,
 		PostgresqlDatabase: "atc",
 	})
-	tsa := enaml.NewInstanceJob("tsa", concourseReleaseName, tsa.Tsa{})
-	web.AddJob(atc)
-	web.AddJob(tsa)
+	return
+}
+
+//CreateTsaJob -
+func (d *Deployment) CreateTsaJob() (job *enaml.InstanceJob) {
+	job = enaml.NewInstanceJob("tsa", concourseReleaseName, tsa.Tsa{})
 	return
 }
 
 //CreateDatabaseInstanceGroup -
-func (d *Deployment) CreateDatabaseInstanceGroup(resourcePoolName string) (db *enaml.InstanceGroup) {
-	db = &enaml.InstanceGroup{
-		Name:           "db",
-		Instances:      1,
-		ResourcePool:   resourcePoolName,
-		PersistentDisk: 10240,
-		VMType:         "database",
-		AZs:            d.DatabaseAZs,
-		Stemcell:       d.StemcellAlias,
+func (d *Deployment) CreateDatabaseInstanceGroup() (db *enaml.InstanceGroup, err error) {
+	if err = validateInstanceGroup(d.ResourcePoolName, d.StemcellAlias, "DatabaseAzs", d.DatabaseAZs); err == nil {
+		db = &enaml.InstanceGroup{
+			Name:           "db",
+			Instances:      1,
+			ResourcePool:   d.ResourcePoolName,
+			PersistentDisk: 10240,
+			VMType:         "database",
+			AZs:            d.DatabaseAZs,
+			Stemcell:       d.StemcellAlias,
+		}
+		db.AddNetwork(d.CreateNetwork())
+		db.AddJob(d.CreatePostgresqlJob())
 	}
-	db.AddNetwork(enaml.Network{
-		Name: d.NetworkName,
-	})
+
+	return
+}
+
+func validateInstanceGroup(resourcePoolName, stemcellAlias, propertyName string, azs []string) (err error) {
+	if resourcePoolName == "" {
+		if (len(azs) == 0) || (stemcellAlias == "") {
+			err = fmt.Errorf("No resource pool name so must provide %s and StemcellAlias property", propertyName)
+		}
+	} else if (len(azs) > 0) || (stemcellAlias != "") {
+		err = fmt.Errorf("ResourcePoolName defined so cannot also define %s and StemcellAlias properties", propertyName)
+	}
+	return
+}
+
+//CreatePostgresqlJob -
+func (d *Deployment) CreatePostgresqlJob() (job *enaml.InstanceJob) {
 	dbs := make([]DBName, 1)
 	dbs[0] = DBName{
 		Name:     "atc",
 		Role:     "atc",
 		Password: d.PostgresPassword,
 	}
-	db.AddJob(enaml.NewInstanceJob("postgresql", concourseReleaseName, postgresql.Postgresql{
+	job = enaml.NewInstanceJob("postgresql", concourseReleaseName, postgresql.Postgresql{
 		Databases: dbs,
-	}))
+	})
 	return
 }
 
 //CreateWorkerInstanceGroup -
-func (d *Deployment) CreateWorkerInstanceGroup(resourcePoolName string) (worker *enaml.InstanceGroup) {
-	worker = &enaml.InstanceGroup{
-		Name:         "worker",
-		Instances:    1,
-		ResourcePool: resourcePoolName,
-		VMType:       "worker",
-		AZs:          d.WorkerAZs,
-		Stemcell:     d.StemcellAlias,
-	}
+func (d *Deployment) CreateWorkerInstanceGroup() (worker *enaml.InstanceGroup, err error) {
+	if err = validateInstanceGroup(d.ResourcePoolName, d.StemcellAlias, "WorkerAZs", d.WorkerAZs); err == nil {
+		worker = &enaml.InstanceGroup{
+			Name:         "worker",
+			Instances:    1,
+			ResourcePool: d.ResourcePoolName,
+			VMType:       "worker",
+			AZs:          d.WorkerAZs,
+			Stemcell:     d.StemcellAlias,
+		}
 
-	worker.AddNetwork(enaml.Network{
-		Name: d.NetworkName,
-	})
-	worker.AddJob(enaml.NewInstanceJob("groundcrew", concourseReleaseName, groundcrew.Groundcrew{}))
-	worker.AddJob(enaml.NewInstanceJob("baggageclaim", concourseReleaseName, baggageclaim.Baggageclaim{}))
-	worker.AddJob(enaml.NewInstanceJob("garden", gardenReleaseName, Garden{
+		worker.AddNetwork(d.CreateNetwork())
+		worker.AddJob(d.CreateGroundCrewJob())
+		worker.AddJob(d.CreateBaggageClaimJob())
+		worker.AddJob(d.CreateGardenJob())
+	}
+	return
+}
+
+//CreateGardenJob -
+func (d *Deployment) CreateGardenJob() (job *enaml.InstanceJob) {
+	job = enaml.NewInstanceJob("garden", gardenReleaseName, Garden{
 		garden.Garden{
 			ListenAddress:   "0.0.0.0:7777",
 			ListenNetwork:   "tcp",
 			AllowHostAccess: true,
 		},
-	}))
+	})
+	return
+}
+
+//CreateBaggageClaimJob -
+func (d *Deployment) CreateBaggageClaimJob() (job *enaml.InstanceJob) {
+	job = enaml.NewInstanceJob("baggageclaim", concourseReleaseName, baggageclaim.Baggageclaim{})
+	return
+}
+
+//CreateGroundCrewJob -
+func (d *Deployment) CreateGroundCrewJob() (job *enaml.InstanceJob) {
+	job = enaml.NewInstanceJob("groundcrew", concourseReleaseName, groundcrew.Groundcrew{})
+	return
+}
+
+//CreateNetwork -
+func (d *Deployment) CreateNetwork() (network enaml.Network) {
+	network = enaml.Network{
+		Name: d.NetworkName,
+	}
 	return
 }
 

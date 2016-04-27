@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/xchapter7x/enaml"
@@ -9,5 +10,7 @@ import (
 
 func main() {
 	var iaas = os.Getenv("CLOUDCONFIG_IAAS")
-	enaml.Paint(cloudconfig.NewDeployment(iaas))
+
+	yamlString, _ := enaml.Paint(cloudconfig.NewDeployment(iaas))
+	fmt.Println(yamlString)
 }
