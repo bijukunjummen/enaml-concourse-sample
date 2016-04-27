@@ -1,0 +1,17 @@
+go build
+enaml="./concourse generate --output-filename concourse-cloudconfig.yml \
+  --bosh-cloud-config true \
+  --bosh-director-uuid 08356199-b2c3-41cc-8319-5bbb980994ab \
+  --network-name private \
+  --url http://my.concourse.ci \
+  --username concourse \
+  --password concourse \
+  --web-instances 2 \
+  --web-azs z1 \
+  --worker-azs z1 \
+  --database-azs z1 \
+  --bosh-stemcell-alias trusty \
+  --postgresql-db-pwd secret"
+
+echo "Running $enaml"
+eval $enaml

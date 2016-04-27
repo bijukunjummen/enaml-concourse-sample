@@ -5,3 +5,4 @@ import:
   - iaas/vsphere
 - package: github.com/onsi/ginkgo
 - package: github.com/onsi/gomega
+- package: github.com/codegangsta/cli

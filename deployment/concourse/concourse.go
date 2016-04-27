@@ -44,10 +44,6 @@ type Deployment struct {
 func NewDeployment() (d Deployment) {
 	d = Deployment{}
 	d.manifest = new(enaml.DeploymentManifest)
-	d.CloudConfig = false
-	d.WebInstances = 1
-	d.DeploymentName = "concourse"
-	d.PostgresPassword = "dummy-postgres-password"
 	return
 }
 
@@ -165,7 +161,7 @@ func validateInstanceGroup(resourcePoolName, stemcellAlias, propertyName string,
 			err = fmt.Errorf("No resource pool name so must provide %s and StemcellAlias property", propertyName)
 		}
 	} else if (len(azs) > 0) || (stemcellAlias != "") {
-		err = fmt.Errorf("ResourcePoolName defined so cannot also define %s and StemcellAlias properties", propertyName)
+		err = fmt.Errorf("ResourcePoolName defined so cannot also define %s (%s) and StemcellAlias (%s) properties", propertyName, azs, stemcellAlias)
 	}
 	return
 }

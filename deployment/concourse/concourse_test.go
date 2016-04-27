@@ -78,6 +78,7 @@ var _ = Describe("Concourse Deployment", func() {
 		Context("when calling with resourcePoolName on deployment", func() {
 			It("then we should return a valid *enaml.InstanceGroup", func() {
 				deployment.ResourcePoolName = "concourse"
+				deployment.WebInstances = 1
 				worker, err := deployment.CreateWebInstanceGroup()
 				Ω(err).Should(BeNil())
 				Ω(worker.Name).Should(Equal("web"))
@@ -93,6 +94,7 @@ var _ = Describe("Concourse Deployment", func() {
 		})
 		Context("when calling with WebAzs and StemcellAlias on deployment", func() {
 			It("then we should return a valid *enaml.InstanceGroup", func() {
+				deployment.WebInstances = 1
 				deployment.WebAZs = []string{"z1"}
 				deployment.StemcellAlias = "trusty"
 				worker, err := deployment.CreateWebInstanceGroup()

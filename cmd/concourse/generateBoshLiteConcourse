@@ -1,0 +1,14 @@
+go build
+enaml="./concourse generate --output-filename concourse-bosh-lite.yml \
+  --bosh-cloud-config false \
+  --bosh-director-uuid 08356199-b2c3-41cc-8319-5bbb980994ab \
+  --network-name concourse \
+  --network-range 10.244.8.0/24 \
+  --network-gateway 10.244.8.1 \
+  --url http://10.244.8.2:8080 \
+  --username concourse \
+  --password concourse \
+  --web-ips 10.244.8.2 \
+  --web-instances 1"
+echo "Running $enaml"
+eval $enaml

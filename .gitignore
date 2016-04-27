@@ -33,3 +33,5 @@ cover.out
 .DS_Store
 cover.html
 testCoverage
+concourse-bosh-lite.yml
+concourse-cloudconfig.yml
