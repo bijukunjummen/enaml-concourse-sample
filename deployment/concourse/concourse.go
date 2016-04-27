@@ -72,7 +72,7 @@ func (d *Deployment) Initialize() (err error) {
 		compilation := d.CreateCompilation(d.NetworkName)
 		d.manifest.SetCompilation(compilation)
 
-		deploymentNetwork := d.CreateDeploymentNetwork(d.NetworkRange, d.NetworkGateway, d.NetworkName, d.WebIPs)
+		deploymentNetwork := d.CreateManualDeploymentNetwork(d.NetworkName, d.NetworkRange, d.NetworkGateway, d.WebIPs)
 		d.manifest.AddNetwork(deploymentNetwork)
 	}
 
@@ -169,15 +169,15 @@ func (d *Deployment) CreateWorkerInstanceGroup(resourcePoolName string) (worker 
 	return
 }
 
-//CreateDeploymentNetwork -
-func (d *Deployment) CreateDeploymentNetwork(networkRange, networkGateway, networkName string, webIPs []string) (network enaml.ManualNetwork) {
+//CreateManualDeploymentNetwork -
+func (d *Deployment) CreateManualDeploymentNetwork(networkName, networkRange, networkGateway string, webIPs []string) (network enaml.ManualNetwork) {
 	network = enaml.ManualNetwork{
 		Name: networkName,
 		Type: "manual",
 	}
 	subnets := make([]enaml.Subnet, 1)
 	subnet := enaml.Subnet{
-		Range:   networkName,
+		Range:   networkRange,
 		Gateway: networkGateway,
 		Static:  webIPs,
 	}
