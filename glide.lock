@@ -1,5 +1,5 @@
 hash: d79cee97c9ae8ddfa7be2bf6dc637af0fefc428f2b74ace6b991f019b3107bbf
-updated: 2016-04-27T16:24:59.841536118-07:00
+updated: 2016-04-27T16:34:44.126783358-07:00
 imports:
 - name: github.com/codegangsta/cli
   version: 4733699ce30faa633c4db36ebfbe427963593d7d
@@ -8,7 +8,7 @@ imports:
 - name: github.com/onsi/gomega
   version: 7ce781ea776b2fd506491011353bded2e40c8467
 - name: github.com/xchapter7x/enaml
-  version: d8bf2db8ed1f6697eae79a8416b9362c71cc5aa7
+  version: 470b18a81afd5ef2ec9b3456adf84b5389550dca
   subpackages:
   - iaas/vsphere
 - name: gopkg.in/yaml.v2
