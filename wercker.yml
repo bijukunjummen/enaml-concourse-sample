@@ -13,6 +13,7 @@ build:
           go version
           go get github.com/Masterminds/glide
           export PATH=$WERCKER_SOURCE_DIR/bin:$PATH
+          rm -fr vendor
           glide install
 
     # Test the project
