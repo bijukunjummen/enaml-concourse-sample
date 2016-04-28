@@ -40,23 +40,21 @@ func AddNetwork(cfg *enaml.CloudConfigManifest) {
 
 func AddVMTypes(cfg *enaml.CloudConfigManifest) {
 	cfg.AddVMType(enaml.VMType{
-		Name: SmallVMName,
-		CloudProperties: awscloudproperties.ResourcePool{
-			InstanceType: SmallVMSize,
-			EphemeralDisk: awscloudproperties.EphemeralDisk{
-				Size:     SmallEphemeralDiskSize,
-				DiskType: SmallDiskType,
-			},
-		},
+		Name:            SmallVMName,
+		CloudProperties: NewVMCloudProperty(SmallVMSize, SmallDiskType, SmallEphemeralDiskSize),
 	})
 	cfg.AddVMType(enaml.VMType{
-		Name: LargeVMName,
-		CloudProperties: awscloudproperties.ResourcePool{
-			InstanceType: LargeVMSize,
-			EphemeralDisk: awscloudproperties.EphemeralDisk{
-				Size:     LargeEphemeralDiskSize,
-				DiskType: LargeDiskType,
-			},
-		},
+		Name:            LargeVMName,
+		CloudProperties: NewVMCloudProperty(LargeVMSize, LargeDiskType, LargeEphemeralDiskSize),
 	})
+}
+
+func NewVMCloudProperty(instanceType, diskType string, diskSize int) awscloudproperties.ResourcePool {
+	return awscloudproperties.ResourcePool{
+		InstanceType: instanceType,
+		EphemeralDisk: awscloudproperties.EphemeralDisk{
+			Size:     diskSize,
+			DiskType: diskType,
+		},
+	}
 }
