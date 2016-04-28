@@ -67,7 +67,7 @@ var _ = Describe("Concourse Deployment", func() {
 				Ω(subnets[0].Range).Should(Equal(networkRange))
 				Ω(subnets[0].Gateway).Should(Equal(networkGateway))
 				Ω(subnets[0].Static).Should(Equal(webIPs))
-				Ω(subnets[0].DNS).Should(Equal(""))
+				Ω(subnets[0].DNS).Should(BeNil())
 				Ω(subnets[0].Reserved).Should(BeEmpty())
 				Ω(subnets[0].AZs).Should(BeEmpty())
 				Ω(subnets[0].AZ).Should(Equal(""))

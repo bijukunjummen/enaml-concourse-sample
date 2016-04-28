@@ -58,23 +58,23 @@ var _ = Describe("given CloudConfig Deployment for AWS", func() {
 		})
 
 		It("then they should have the option of a large VM configuration", func() {
-			_, err := getVmTypeByName(LargeVMName, awsConfig.VMTypes)
+			_, err := getVmTypeByName(MediumVMName, awsConfig.VMTypes)
 			Ω(err).ShouldNot(HaveOccurred())
 		})
 
 		Context("when the vmtype is large", func() {
 			var vm enaml.VMType
 			BeforeEach(func() {
-				vm, _ = getVmTypeByName(LargeVMName, awsConfig.VMTypes)
+				vm, _ = getVmTypeByName(MediumVMName, awsConfig.VMTypes)
 			})
 			It("then it should use a m3.medium size aws instance", func() {
-				Ω(vm.CloudProperties.(awscloudproperties.VMType).InstanceType).Should(Equal(LargeVMSize))
+				Ω(vm.CloudProperties.(awscloudproperties.VMType).InstanceType).Should(Equal(MediumVMSize))
 			})
 
 			It("then it should use a properly configured ephemeral disk", func() {
-				properLargeDiskSize := LargeEphemeralDiskSize
-				properDiskType := LargeDiskType
-				Ω(vm.CloudProperties.(awscloudproperties.VMType).EphemeralDisk.Size).Should(Equal(properLargeDiskSize))
+				properMediumDiskSize := MediumEphemeralDiskSize
+				properDiskType := MediumDiskType
+				Ω(vm.CloudProperties.(awscloudproperties.VMType).EphemeralDisk.Size).Should(Equal(properMediumDiskSize))
 				Ω(vm.CloudProperties.(awscloudproperties.VMType).EphemeralDisk.DiskType).Should(Equal(properDiskType))
 			})
 		})
@@ -87,17 +87,44 @@ var _ = Describe("given CloudConfig Deployment for AWS", func() {
 		})
 	})
 
-	XContext("when a user of the iaas would like to assign a network", func() {
-		It("then they should have the option of a private and a vip network", func() {
-
-			Ω(1).Should(Equal(1))
+	Context("when a user of the iaas would like to assign a network", func() {
+		It("then they should have a private and a vip network", func() {
+			var networkList []string
+			for _, v := range awsConfig.Networks {
+				switch v.(type) {
+				case enaml.ManualNetwork:
+					networkList = append(networkList, v.(enaml.ManualNetwork).Name)
+				case enaml.VIPNetwork:
+					networkList = append(networkList, v.(enaml.VIPNetwork).Name)
+				case enaml.DynamicNetwork:
+					networkList = append(networkList, v.(enaml.DynamicNetwork).Name)
+				}
+			}
+			Ω(networkList).Should(ContainElement(PrivateNetworkName))
+			Ω(networkList).Should(ContainElement(VIPNetworkName))
 		})
 
 		Context("when a user of the iaas is assigning the private network", func() {
+			var privateNetwork enaml.ManualNetwork
+			BeforeEach(func() {
+				for _, v := range awsConfig.Networks {
+					var name string
+					switch v.(type) {
+					case enaml.ManualNetwork:
+						name = v.(enaml.ManualNetwork).Name
+					case enaml.VIPNetwork:
+						name = v.(enaml.VIPNetwork).Name
+					case enaml.DynamicNetwork:
+						name = v.(enaml.DynamicNetwork).Name
+					}
+					if name == PrivateNetworkName {
+						privateNetwork = v.(enaml.ManualNetwork)
+					}
+				}
+			})
 
-			It("then they should have the option of multiple subnets - one for each configured AZ", func() {
-
-				Ω(1).Should(Equal(1))
+			It("then they should have one subnet for each configured AZ", func() {
+				Ω(len(privateNetwork.Subnets)).Should(Equal(len(awsConfig.AZs)))
 			})
 		})
 	})
