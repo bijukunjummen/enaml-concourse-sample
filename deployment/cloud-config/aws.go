@@ -49,8 +49,8 @@ func AddVMTypes(cfg *enaml.CloudConfigManifest) {
 	})
 }
 
-func NewVMCloudProperty(instanceType, diskType string, diskSize int) awscloudproperties.ResourcePool {
-	return awscloudproperties.ResourcePool{
+func NewVMCloudProperty(instanceType, diskType string, diskSize int) awscloudproperties.VMType {
+	return awscloudproperties.VMType{
 		InstanceType: instanceType,
 		EphemeralDisk: awscloudproperties.EphemeralDisk{
 			Size:     diskSize,

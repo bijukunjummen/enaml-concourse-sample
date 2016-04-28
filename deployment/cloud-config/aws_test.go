@@ -39,14 +39,14 @@ var _ = Describe("given CloudConfig Deployment for AWS", func() {
 				vm, _ = getVmTypeByName(SmallVMName, awsConfig.VMTypes)
 			})
 			It("then it should use a t2.micro size aws instance", func() {
-				Ω(vm.CloudProperties.(awscloudproperties.ResourcePool).InstanceType).Should(Equal(SmallVMSize))
+				Ω(vm.CloudProperties.(awscloudproperties.VMType).InstanceType).Should(Equal(SmallVMSize))
 			})
 
 			It("then it should use a properly configured ephemeral disk", func() {
 				properSmallDiskSize := SmallEphemeralDiskSize
 				properDiskType := SmallDiskType
-				Ω(vm.CloudProperties.(awscloudproperties.ResourcePool).EphemeralDisk.Size).Should(Equal(properSmallDiskSize))
-				Ω(vm.CloudProperties.(awscloudproperties.ResourcePool).EphemeralDisk.DiskType).Should(Equal(properDiskType))
+				Ω(vm.CloudProperties.(awscloudproperties.VMType).EphemeralDisk.Size).Should(Equal(properSmallDiskSize))
+				Ω(vm.CloudProperties.(awscloudproperties.VMType).EphemeralDisk.DiskType).Should(Equal(properDiskType))
 			})
 		})
 
@@ -61,14 +61,14 @@ var _ = Describe("given CloudConfig Deployment for AWS", func() {
 				vm, _ = getVmTypeByName(LargeVMName, awsConfig.VMTypes)
 			})
 			It("then it should use a m3.medium size aws instance", func() {
-				Ω(vm.CloudProperties.(awscloudproperties.ResourcePool).InstanceType).Should(Equal(LargeVMSize))
+				Ω(vm.CloudProperties.(awscloudproperties.VMType).InstanceType).Should(Equal(LargeVMSize))
 			})
 
 			It("then it should use a properly configured ephemeral disk", func() {
 				properLargeDiskSize := LargeEphemeralDiskSize
 				properDiskType := LargeDiskType
-				Ω(vm.CloudProperties.(awscloudproperties.ResourcePool).EphemeralDisk.Size).Should(Equal(properLargeDiskSize))
-				Ω(vm.CloudProperties.(awscloudproperties.ResourcePool).EphemeralDisk.DiskType).Should(Equal(properDiskType))
+				Ω(vm.CloudProperties.(awscloudproperties.VMType).EphemeralDisk.Size).Should(Equal(properLargeDiskSize))
+				Ω(vm.CloudProperties.(awscloudproperties.VMType).EphemeralDisk.DiskType).Should(Equal(properDiskType))
 			})
 		})
 	})
