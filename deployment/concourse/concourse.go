@@ -20,24 +20,28 @@ const (
 //Deployment -
 type Deployment struct {
 	enaml.Deployment
-	manifest          *enaml.DeploymentManifest
-	ConcourseURL      string
-	ConcourseUserName string
-	ConcoursePassword string
-	DirectorUUID      string
-	NetworkName       string
-	WebIPs            []string
-	WebInstances      int
-	CloudConfig       bool
-	WebAZs            []string
-	DatabaseAZs       []string
-	WorkerAZs         []string
-	DeploymentName    string
-	NetworkRange      string
-	NetworkGateway    string
-	StemcellAlias     string
-	PostgresPassword  string
-	ResourcePoolName  string
+	manifest            *enaml.DeploymentManifest
+	ConcourseURL        string
+	ConcourseUserName   string
+	ConcoursePassword   string
+	DirectorUUID        string
+	NetworkName         string
+	WebIPs              []string
+	WebInstances        int
+	CloudConfig         bool
+	WebAZs              []string
+	DatabaseAZs         []string
+	WorkerAZs           []string
+	DeploymentName      string
+	NetworkRange        string
+	NetworkGateway      string
+	StemcellAlias       string
+	PostgresPassword    string
+	ResourcePoolName    string
+	WebVMType           string
+	WorkerVMType        string
+	DatabaseVMType      string
+	DatabaseStorageType string
 }
 
 //NewDeployment -
@@ -105,7 +109,7 @@ func (d *Deployment) CreateWebInstanceGroup() (web *enaml.InstanceGroup, err err
 			Name:         "web",
 			Instances:    d.WebInstances,
 			ResourcePool: d.ResourcePoolName,
-			VMType:       "web",
+			VMType:       d.WebVMType,
 			AZs:          d.WebAZs,
 			Stemcell:     d.StemcellAlias,
 		}
@@ -138,15 +142,20 @@ func (d *Deployment) CreateTsaJob() (job *enaml.InstanceJob) {
 
 //CreateDatabaseInstanceGroup -
 func (d *Deployment) CreateDatabaseInstanceGroup() (db *enaml.InstanceGroup, err error) {
+	persistenceDisk := 10240
+	if d.DatabaseStorageType != "" {
+		persistenceDisk = 0
+	}
 	if err = validateInstanceGroup(d.ResourcePoolName, d.StemcellAlias, "DatabaseAzs", d.DatabaseAZs); err == nil {
 		db = &enaml.InstanceGroup{
-			Name:           "db",
-			Instances:      1,
-			ResourcePool:   d.ResourcePoolName,
-			PersistentDisk: 10240,
-			VMType:         "database",
-			AZs:            d.DatabaseAZs,
-			Stemcell:       d.StemcellAlias,
+			Name:               "db",
+			Instances:          1,
+			ResourcePool:       d.ResourcePoolName,
+			PersistentDisk:     persistenceDisk,
+			PersistentDiskType: d.DatabaseStorageType,
+			VMType:             d.DatabaseVMType,
+			AZs:                d.DatabaseAZs,
+			Stemcell:           d.StemcellAlias,
 		}
 		db.AddNetwork(d.CreateNetwork())
 		db.AddJob(d.CreatePostgresqlJob())
@@ -187,7 +196,7 @@ func (d *Deployment) CreateWorkerInstanceGroup() (worker *enaml.InstanceGroup, e
 			Name:         "worker",
 			Instances:    1,
 			ResourcePool: d.ResourcePoolName,
-			VMType:       "worker",
+			VMType:       d.WorkerVMType,
 			AZs:          d.WorkerAZs,
 			Stemcell:     d.StemcellAlias,
 		}

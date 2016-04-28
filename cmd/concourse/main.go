@@ -34,24 +34,28 @@ func main() {
 }
 
 const (
-	defaultFileName          string = "concourse.yml"
-	outputFileName           string = "OUTPUT_FILENAME"
-	concoursePassword        string = "PASSWORD"
-	concourseUsername        string = "USERNAME"
-	concourseURL             string = "URL"
-	concourseWebInstances    string = "WEB_INSTANCES"
-	concourseWebIPs          string = "WEB_IPS"
-	boshDirectorUUID         string = "BOSH_DIRECTOR_UUID"
-	boshStemcellAlias        string = "BOSH_STEMCELL_ALIAS"
-	concourseNetworkName     string = "NETWORK_NAME"
-	concourseNetworkRange    string = "NETWORK_RANGE"
-	concourseNetworkGateway  string = "NETWORK_GATEWAY"
-	concourseWebAZs          string = "WEB_AZS"
-	concourseDatabaseAZs     string = "DATABASE_AZS"
-	concourseWorkerAZs       string = "WORKER_AZS"
-	boshCloudConfig          string = "BOSH_CLOUD_CONFIG"
-	concourseDeploymentName  string = "BOSH_DEPLOYMENT_NAME"
-	concoursePostgresqlDbPwd string = "POSTGRESQL_DB_PWD"
+	defaultFileName              string = "concourse.yml"
+	outputFileName               string = "OUTPUT_FILENAME"
+	concoursePassword            string = "PASSWORD"
+	concourseUsername            string = "USERNAME"
+	concourseURL                 string = "URL"
+	concourseWebInstances        string = "WEB_INSTANCES"
+	concourseWebIPs              string = "WEB_IPS"
+	boshDirectorUUID             string = "BOSH_DIRECTOR_UUID"
+	boshStemcellAlias            string = "BOSH_STEMCELL_ALIAS"
+	concourseNetworkName         string = "NETWORK_NAME"
+	concourseNetworkRange        string = "NETWORK_RANGE"
+	concourseNetworkGateway      string = "NETWORK_GATEWAY"
+	concourseWebAZs              string = "WEB_AZS"
+	concourseDatabaseAZs         string = "DATABASE_AZS"
+	concourseWorkerAZs           string = "WORKER_AZS"
+	boshCloudConfig              string = "BOSH_CLOUD_CONFIG"
+	concourseDeploymentName      string = "BOSH_DEPLOYMENT_NAME"
+	concourseWebVMType           string = "WEB_VM_TYPE"
+	concourseDatabaseVMType      string = "DATABASE_VM_TYPE"
+	concourseWorkerVMType        string = "WORKER_VM_TYPE"
+	concourseDatabaseStorageType string = "DATABASE_STORAGE_TYPE"
+	concoursePostgresqlDbPwd     string = "POSTGRESQL_DB_PWD"
 )
 
 func getFlag(input string) (flag string) {
@@ -132,6 +136,22 @@ func generateFlags() (flags []cli.Flag) {
 			Desc:   "password for postgresql job",
 			EnvVar: concoursePostgresqlDbPwd,
 		},
+		concourseWebVMType: flagBucket{
+			Desc:   "web vm type reference from cloudConfig",
+			EnvVar: concourseWebVMType,
+		},
+		concourseDatabaseVMType: flagBucket{
+			Desc:   "database vm type reference from cloudConfig",
+			EnvVar: concourseDatabaseVMType,
+		},
+		concourseWorkerVMType: flagBucket{
+			Desc:   "worker vm type reference from cloudConfig",
+			EnvVar: concourseWorkerVMType,
+		},
+		concourseDatabaseStorageType: flagBucket{
+			Desc:   "database storage type reference from cloudConfig",
+			EnvVar: concourseDatabaseStorageType,
+		},
 	}
 	for _, v := range flagList {
 		if v.StringSlice {
@@ -209,6 +229,11 @@ func generate(c *cli.Context) {
 	if c.IsSet(getFlag(concourseWorkerAZs)) {
 		deployment.WorkerAZs = c.StringSlice(getFlag(concourseWorkerAZs))
 	}
+
+	deployment.WebVMType = c.String(getFlag(concourseWebVMType))
+	deployment.WorkerVMType = c.String(getFlag(concourseWorkerVMType))
+	deployment.DatabaseVMType = c.String(getFlag(concourseDatabaseVMType))
+	deployment.DatabaseStorageType = c.String(getFlag(concourseDatabaseStorageType))
 
 	var yamlString string
 	var err error
