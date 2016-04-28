@@ -79,17 +79,18 @@ var _ = Describe("Concourse Deployment", func() {
 			It("then we should return a valid *enaml.InstanceGroup", func() {
 				deployment.ResourcePoolName = "concourse"
 				deployment.WebInstances = 1
-				worker, err := deployment.CreateWebInstanceGroup()
+				deployment.WebVMType = "small"
+				web, err := deployment.CreateWebInstanceGroup()
 				Ω(err).Should(BeNil())
-				Ω(worker.Name).Should(Equal("web"))
-				Ω(worker.Instances).Should(Equal(1))
-				Ω(worker.ResourcePool).Should(Equal("concourse"))
-				Ω(worker.AZs).Should(BeEmpty())
-				Ω(worker.PersistentDisk).Should(Equal(0))
-				Ω(worker.Stemcell).Should(Equal(""))
-				Ω(worker.VMType).Should(Equal("web"))
-				Ω(len(worker.Networks)).Should(Equal(1))
-				Ω(len(worker.Jobs)).Should(Equal(2))
+				Ω(web.Name).Should(Equal("web"))
+				Ω(web.Instances).Should(Equal(1))
+				Ω(web.ResourcePool).Should(Equal("concourse"))
+				Ω(web.AZs).Should(BeEmpty())
+				Ω(web.PersistentDisk).Should(Equal(0))
+				Ω(web.Stemcell).Should(Equal(""))
+				Ω(web.VMType).Should(Equal("small"))
+				Ω(len(web.Networks)).Should(Equal(1))
+				Ω(len(web.Jobs)).Should(Equal(2))
 			})
 		})
 		Context("when calling with WebAzs and StemcellAlias on deployment", func() {
@@ -97,17 +98,18 @@ var _ = Describe("Concourse Deployment", func() {
 				deployment.WebInstances = 1
 				deployment.WebAZs = []string{"z1"}
 				deployment.StemcellAlias = "trusty"
-				worker, err := deployment.CreateWebInstanceGroup()
+				deployment.WebVMType = "small"
+				web, err := deployment.CreateWebInstanceGroup()
 				Ω(err).Should(BeNil())
-				Ω(worker.Name).Should(Equal("web"))
-				Ω(worker.Instances).Should(Equal(1))
-				Ω(worker.ResourcePool).Should(Equal(""))
-				Ω(worker.AZs).Should(Equal([]string{"z1"}))
-				Ω(worker.PersistentDisk).Should(Equal(0))
-				Ω(worker.Stemcell).Should(Equal("trusty"))
-				Ω(worker.VMType).Should(Equal("web"))
-				Ω(len(worker.Networks)).Should(Equal(1))
-				Ω(len(worker.Jobs)).Should(Equal(2))
+				Ω(web.Name).Should(Equal("web"))
+				Ω(web.Instances).Should(Equal(1))
+				Ω(web.ResourcePool).Should(Equal(""))
+				Ω(web.AZs).Should(Equal([]string{"z1"}))
+				Ω(web.PersistentDisk).Should(Equal(0))
+				Ω(web.Stemcell).Should(Equal("trusty"))
+				Ω(web.VMType).Should(Equal("small"))
+				Ω(len(web.Networks)).Should(Equal(1))
+				Ω(len(web.Jobs)).Should(Equal(2))
 			})
 		})
 		Context("when calling with ResourcePoolName, WebAzs and StemcellAlias on deployment", func() {
@@ -130,34 +132,38 @@ var _ = Describe("Concourse Deployment", func() {
 		Context("when calling with resourcePoolName on deployment", func() {
 			It("then we should return a valid *enaml.InstanceGroup", func() {
 				deployment.ResourcePoolName = "concourse"
-				worker, err := deployment.CreateDatabaseInstanceGroup()
+				deployment.DatabaseVMType = "medium"
+				database, err := deployment.CreateDatabaseInstanceGroup()
 				Ω(err).Should(BeNil())
-				Ω(worker.Name).Should(Equal("db"))
-				Ω(worker.Instances).Should(Equal(1))
-				Ω(worker.ResourcePool).Should(Equal("concourse"))
-				Ω(worker.AZs).Should(BeEmpty())
-				Ω(worker.PersistentDisk).Should(Equal(10240))
-				Ω(worker.Stemcell).Should(Equal(""))
-				Ω(worker.VMType).Should(Equal("database"))
-				Ω(len(worker.Networks)).Should(Equal(1))
-				Ω(len(worker.Jobs)).Should(Equal(1))
+				Ω(database.Name).Should(Equal("db"))
+				Ω(database.Instances).Should(Equal(1))
+				Ω(database.ResourcePool).Should(Equal("concourse"))
+				Ω(database.AZs).Should(BeEmpty())
+				Ω(database.PersistentDisk).Should(Equal(10240))
+				Ω(database.Stemcell).Should(Equal(""))
+				Ω(database.VMType).Should(Equal("medium"))
+				Ω(len(database.Networks)).Should(Equal(1))
+				Ω(len(database.Jobs)).Should(Equal(1))
 			})
 		})
 		Context("when calling with Azs and Stemcell on deployment", func() {
 			It("then we should return a valid *enaml.InstanceGroup", func() {
 				deployment.DatabaseAZs = []string{"z1"}
 				deployment.StemcellAlias = "trusty"
-				worker, err := deployment.CreateDatabaseInstanceGroup()
+				deployment.DatabaseVMType = "medium"
+				deployment.DatabaseStorageType = "medium"
+				database, err := deployment.CreateDatabaseInstanceGroup()
 				Ω(err).Should(BeNil())
-				Ω(worker.Name).Should(Equal("db"))
-				Ω(worker.Instances).Should(Equal(1))
-				Ω(worker.ResourcePool).Should(Equal(""))
-				Ω(worker.AZs).Should(Equal([]string{"z1"}))
-				Ω(worker.PersistentDisk).Should(Equal(10240))
-				Ω(worker.Stemcell).Should(Equal("trusty"))
-				Ω(worker.VMType).Should(Equal("database"))
-				Ω(len(worker.Networks)).Should(Equal(1))
-				Ω(len(worker.Jobs)).Should(Equal(1))
+				Ω(database.Name).Should(Equal("db"))
+				Ω(database.Instances).Should(Equal(1))
+				Ω(database.ResourcePool).Should(Equal(""))
+				Ω(database.AZs).Should(Equal([]string{"z1"}))
+				Ω(database.PersistentDisk).Should(Equal(0))
+				Ω(database.PersistentDiskType).Should(Equal("medium"))
+				Ω(database.Stemcell).Should(Equal("trusty"))
+				Ω(database.VMType).Should(Equal("medium"))
+				Ω(len(database.Networks)).Should(Equal(1))
+				Ω(len(database.Jobs)).Should(Equal(1))
 			})
 		})
 		Context("when calling with Azs, Stemcell, ResourcePool on deployment", func() {
@@ -180,6 +186,7 @@ var _ = Describe("Concourse Deployment", func() {
 		Context("when calling with resourcePoolName on deployment", func() {
 			It("then we should return a valid *enaml.InstanceGroup", func() {
 				deployment.ResourcePoolName = "concourse"
+				deployment.WorkerVMType = "medium"
 				worker, err := deployment.CreateWorkerInstanceGroup()
 				Ω(err).Should(BeNil())
 				Ω(worker.Name).Should(Equal("worker"))
@@ -188,7 +195,7 @@ var _ = Describe("Concourse Deployment", func() {
 				Ω(worker.AZs).Should(BeEmpty())
 				Ω(worker.PersistentDisk).Should(Equal(0))
 				Ω(worker.Stemcell).Should(Equal(""))
-				Ω(worker.VMType).Should(Equal("worker"))
+				Ω(worker.VMType).Should(Equal("medium"))
 				Ω(len(worker.Networks)).Should(Equal(1))
 				Ω(len(worker.Jobs)).Should(Equal(3))
 			})
@@ -197,6 +204,7 @@ var _ = Describe("Concourse Deployment", func() {
 			It("then we should return a valid *enaml.InstanceGroup", func() {
 				deployment.WorkerAZs = []string{"z1"}
 				deployment.StemcellAlias = "trusty"
+				deployment.WorkerVMType = "medium"
 				worker, err := deployment.CreateWorkerInstanceGroup()
 				Ω(err).Should(BeNil())
 				Ω(worker.Name).Should(Equal("worker"))
@@ -205,7 +213,7 @@ var _ = Describe("Concourse Deployment", func() {
 				Ω(worker.AZs).Should(Equal([]string{"z1"}))
 				Ω(worker.PersistentDisk).Should(Equal(0))
 				Ω(worker.Stemcell).Should(Equal("trusty"))
-				Ω(worker.VMType).Should(Equal("worker"))
+				Ω(worker.VMType).Should(Equal("medium"))
 				Ω(len(worker.Networks)).Should(Equal(1))
 				Ω(len(worker.Jobs)).Should(Equal(3))
 			})
