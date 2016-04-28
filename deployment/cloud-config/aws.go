@@ -14,6 +14,8 @@ const (
 	LargeEphemeralDiskSize = 30000
 	SmallDiskType          = "gp2"
 	SmallEphemeralDiskSize = 3000
+	AZ1Name                = "az1"
+	AZ2Name                = "az2"
 )
 
 func NewAWSCloudConfig() (awsCloudConfig enaml.CloudConfigManifest) {
@@ -26,8 +28,18 @@ func NewAWSCloudConfig() (awsCloudConfig enaml.CloudConfigManifest) {
 }
 
 func AddAZs(cfg *enaml.CloudConfigManifest) {
-	cfg.AddAZ(enaml.AZ{})
-	cfg.AddAZ(enaml.AZ{})
+	cfg.AddAZ(enaml.AZ{
+		Name: AZ1Name,
+		CloudProperties: awscloudproperties.AZ{
+			AvailabilityZoneName: awscloudproperties.USEast + "a",
+		},
+	})
+	cfg.AddAZ(enaml.AZ{
+		Name: AZ2Name,
+		CloudProperties: awscloudproperties.AZ{
+			AvailabilityZoneName: awscloudproperties.USEast + "b",
+		},
+	})
 }
 
 func AddDisk(cfg *enaml.CloudConfigManifest) {

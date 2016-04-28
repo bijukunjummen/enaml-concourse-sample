@@ -2,6 +2,7 @@ package cloudconfig_test
 
 import (
 	"errors"
+	"fmt"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -22,7 +23,23 @@ var _ = Describe("given CloudConfig Deployment for AWS", func() {
 			numberOfAZs := len(awsConfig.AZs)
 			Ω(numberOfAZs).Should(BeNumerically(">=", haCount))
 		})
+
+		It("then each AZ definition should map to a unique aws AZ", func() {
+			exists := make(map[string]int)
+
+			Ω(func() error {
+				for _, v := range awsConfig.AZs {
+					awsAZ := v.CloudProperties.(awscloudproperties.AZ).AvailabilityZoneName
+					if _, alreadyExists := exists[awsAZ]; alreadyExists {
+						return errors.New(fmt.Sprintf("duplicate az assignment to: %s", awsAZ))
+					}
+					exists[awsAZ] = 1
+				}
+				return nil
+			}()).ShouldNot(HaveOccurred())
+		})
 	})
+
 	Context("when a user of the iaas would like to define vm types", func() {
 		It("then there should be 2 vm type options available", func() {
 			Ω(len(awsConfig.VMTypes)).Should(Equal(2))
