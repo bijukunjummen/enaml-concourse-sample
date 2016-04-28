@@ -11,6 +11,6 @@ import (
 func main() {
 	var iaas = os.Getenv("CLOUDCONFIG_IAAS")
 
-	yamlString, _ := enaml.Paint(cloudconfig.NewDeployment(iaas))
+	yamlString, _ := enaml.Cloud(cloudconfig.NewCloudConfig(iaas))
 	fmt.Println(yamlString)
 }

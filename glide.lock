@@ -1,14 +1,14 @@
 hash: d79cee97c9ae8ddfa7be2bf6dc637af0fefc428f2b74ace6b991f019b3107bbf
-updated: 2016-04-28T12:49:01.038812334-04:00
+updated: 2016-04-28T14:29:21.504406539-04:00
 imports:
 - name: github.com/codegangsta/cli
-  version: 4733699ce30faa633c4db36ebfbe427963593d7d
+  version: 6e08192c80417342117d2672274a252a28888705
 - name: github.com/onsi/ginkgo
   version: 2c2e9bb47b4e44067024f29339588cac8b34dd12
 - name: github.com/onsi/gomega
   version: 7ce781ea776b2fd506491011353bded2e40c8467
 - name: github.com/xchapter7x/enaml
-  version: 6386f7f5003ed598ea9ea99a360f263104ed176d
+  version: a87a8887bd01acdb9573ca6ce7c73fa477823f9d
   subpackages:
   - iaas/vsphere
   - cloudproperties/aws

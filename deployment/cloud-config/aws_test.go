@@ -12,7 +12,7 @@ import (
 )
 
 var _ = Describe("given CloudConfig Deployment for AWS", func() {
-	var awsConfig enaml.CloudConfigManifest
+	var awsConfig *enaml.CloudConfigManifest
 	BeforeEach(func() {
 		awsConfig = NewAWSCloudConfig()
 	})
@@ -25,18 +25,8 @@ var _ = Describe("given CloudConfig Deployment for AWS", func() {
 		})
 
 		It("then each AZ definition should map to a unique aws AZ", func() {
-			exists := make(map[string]int)
-
-			Ω(func() error {
-				for _, v := range awsConfig.AZs {
-					awsAZ := v.CloudProperties.(awscloudproperties.AZ).AvailabilityZoneName
-					if _, alreadyExists := exists[awsAZ]; alreadyExists {
-						return errors.New(fmt.Sprintf("duplicate az assignment to: %s", awsAZ))
-					}
-					exists[awsAZ] = 1
-				}
-				return nil
-			}()).ShouldNot(HaveOccurred())
+			err := checkUniqueAZs(awsConfig.AZs)
+			Ω(err).ShouldNot(HaveOccurred())
 		})
 	})
 
@@ -122,4 +112,16 @@ func getVmTypeByName(name string, vmTypes []enaml.VMType) (res enaml.VMType, err
 		}
 	}
 	return
+}
+
+func checkUniqueAZs(azs []enaml.AZ) error {
+	exists := make(map[string]int)
+	for _, v := range azs {
+		awsAZ := v.CloudProperties.(awscloudproperties.AZ).AvailabilityZoneName
+		if _, alreadyExists := exists[awsAZ]; alreadyExists {
+			return errors.New(fmt.Sprintf("duplicate az assignment to: %s", awsAZ))
+		}
+		exists[awsAZ] = 1
+	}
+	return nil
 }

@@ -18,12 +18,12 @@ const (
 	AZ2Name                = "az2"
 )
 
-func NewAWSCloudConfig() (awsCloudConfig enaml.CloudConfigManifest) {
-	awsCloudConfig = enaml.CloudConfigManifest{}
-	AddAZs(&awsCloudConfig)
-	AddDisk(&awsCloudConfig)
-	AddNetwork(&awsCloudConfig)
-	AddVMTypes(&awsCloudConfig)
+func NewAWSCloudConfig() (awsCloudConfig *enaml.CloudConfigManifest) {
+	awsCloudConfig = &enaml.CloudConfigManifest{}
+	AddAZs(awsCloudConfig)
+	AddDisk(awsCloudConfig)
+	AddNetwork(awsCloudConfig)
+	AddVMTypes(awsCloudConfig)
 	return
 }
 
