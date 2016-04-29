@@ -14,7 +14,7 @@ import (
 var _ = Describe("given CloudConfig Deployment for AWS", func() {
 	var awsConfig *enaml.CloudConfigManifest
 	BeforeEach(func() {
-		awsConfig = NewAWSCloudConfig()
+		awsConfig = NewAWSCloudConfig(awscloudproperties.USWest, []string{"z1", "z2"}, []string{"subnet-asdfasdfa", "subnet-4444444"}, []string{"security-group-for-something-secure"})
 	})
 
 	Context("when AZs are defined", func() {

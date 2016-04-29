@@ -1,8 +1,11 @@
 package cloudconfig
 
 import (
+	"errors"
+
 	"github.com/xchapter7x/enaml"
 	"github.com/xchapter7x/enaml/cloudproperties/aws"
+	"github.com/xchapter7x/lo"
 )
 
 const (
@@ -18,20 +21,31 @@ const (
 	MediumEphemeralDiskSize = 30000
 	SmallDiskType           = DefaultDiskType
 	SmallEphemeralDiskSize  = 3000
-	AZ1Name                 = "z1"
-	AZ2Name                 = "z2"
 	PrivateNetworkName      = "private"
 	VIPNetworkName          = "vip"
-	Region                  = awscloudproperties.USWest
-	SubnetPropertyName1     = "subnet-5f423a06"
-	SubnetPropertyName2     = "subnet-xxxxxxxx"
 )
 
 var (
-	DefaultSecurityGroups = []string{"bosh-cwashburn-InternalSecurityGroup-WQAFGW1Z5W0Y"}
+	Region                string
+	AZ1Name               string
+	AZ2Name               string
+	SubnetPropertyName1   string
+	SubnetPropertyName2   string
+	DefaultSecurityGroups []string
 )
 
-func NewAWSCloudConfig() (awsCloudConfig *enaml.CloudConfigManifest) {
+func NewAWSCloudConfig(region string, azList, subnetList, securityGroupList []string) (awsCloudConfig *enaml.CloudConfigManifest) {
+	if err := validateFlags(region, azList, subnetList, securityGroupList); err != nil {
+		lo.G.Error(err)
+		return
+	}
+	DefaultSecurityGroups = securityGroupList
+	SubnetPropertyName1 = subnetList[0]
+	SubnetPropertyName2 = subnetList[1]
+	AZ1Name = azList[0]
+	AZ2Name = azList[1]
+	Region = region
+
 	awsCloudConfig = &enaml.CloudConfigManifest{}
 	AddAZs(awsCloudConfig)
 	AddDisk(awsCloudConfig)
@@ -39,6 +53,34 @@ func NewAWSCloudConfig() (awsCloudConfig *enaml.CloudConfigManifest) {
 	AddVMTypes(awsCloudConfig)
 	AddCompilation(awsCloudConfig, AZ1Name, MediumVMName, PrivateNetworkName)
 	return
+}
+
+func validateFlags(region string, azList, subnetList, securityGroupList []string) error {
+
+	if len(securityGroupList) == 0 {
+		return errors.New("!!!!!!!!!!\n\nyou should give at least one security group\n\n!!!!!!!!!!!")
+	}
+
+	if len(subnetList) < 1 {
+		return errors.New("!!!!!!!!!!!\n\nyou have not given any subnets\n\n!!!!!!!!!!!")
+	}
+
+	if len(subnetList) < 2 {
+		return errors.New("!!!!!!!!!!!\n\nyou have not given enough subnets to support HA\n\n!!!!!!!!!!!")
+	}
+
+	if len(azList) < 1 {
+		return errors.New("!!!!!!!!!!!\n\nyou have not given any AZs to use\n\n!!!!!!!!!!!")
+	}
+
+	if len(azList) < 2 {
+		return errors.New("!!!!!!!!!!!\n\nyou have not given enough AZs to be HA\n\n!!!!!!!!!!!")
+	}
+
+	if region == "" {
+		return errors.New("!!!!!!!!!!!\n\nyou have not given a region to use\n\n!!!!!!!!!!!")
+	}
+	return nil
 }
 
 func AddCompilation(cfg *enaml.CloudConfigManifest, az string, vmtype string, network string) {
