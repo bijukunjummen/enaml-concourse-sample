@@ -19,6 +19,8 @@ const (
 	PrivateNetworkName      = "private"
 	VIPNetworkName          = "vip"
 	Region                  = awscloudproperties.USWest
+	SubnetPropertyName1     = "subnet-5f423a06"
+	SubnetPropertyName2     = "subnet-xxxxxxxx"
 )
 
 var (
@@ -67,15 +69,24 @@ func AddDisk(cfg *enaml.CloudConfigManifest) {
 }
 
 func AddNetwork(cfg *enaml.CloudConfigManifest) {
-	octet := "10.0.0"
-	dns := octet + ".2"
+	octet1 := "10.0.0"
+	octet2 := "10.10.0"
+	dns := octet1 + ".2"
 	privateNetwork := enaml.NewManualNetwork(PrivateNetworkName)
-	privateSubnet := enaml.NewSubnet(octet, AZ1Name)
-	privateSubnet.AddDNS(dns)
-	privateNetwork.AddSubnet(privateSubnet)
-	privateNetwork.AddSubnet(enaml.Subnet{})
+	privateNetwork.AddSubnet(createSubnet(octet1, dns, AZ1Name, SubnetPropertyName1))
+	privateNetwork.AddSubnet(createSubnet(octet2, dns, AZ2Name, SubnetPropertyName2))
 	cfg.AddNetwork(privateNetwork)
 	cfg.AddNetwork(enaml.NewVIPNetwork(VIPNetworkName))
+}
+
+func createSubnet(octet, dns, azname, subnetPropertyName string) enaml.Subnet {
+	subnet := enaml.NewSubnet(octet, azname)
+	subnet.AddDNS(dns)
+	subnet.AddReserved(octet + ".1-" + octet + ".10")
+	subnet.CloudProperties = awscloudproperties.Network{
+		Subnet: subnetPropertyName,
+	}
+	return subnet
 }
 
 func AddVMTypes(cfg *enaml.CloudConfigManifest) {

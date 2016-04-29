@@ -80,10 +80,15 @@ var _ = Describe("given CloudConfig Deployment for AWS", func() {
 		})
 	})
 
-	XContext("when a user of the iaas would like to assign disk", func() {
-		It("then they should have the option of small or large capacity configurations", func() {
-
-			Ω(1).Should(Equal(1))
+	Context("when a user of the iaas would like to assign disk", func() {
+		XIt("then they should have the option of a small capacity configurations", func() {
+			Ω(0).Should(Equal(1))
+		})
+		XIt("then they should have the option of a medium capacity configurations", func() {
+			Ω(0).Should(Equal(1))
+		})
+		XIt("then they should have the option of a large capacity configurations", func() {
+			Ω(0).Should(Equal(1))
 		})
 	})
 
@@ -125,6 +130,15 @@ var _ = Describe("given CloudConfig Deployment for AWS", func() {
 
 			It("then they should have one subnet for each configured AZ", func() {
 				Ω(len(privateNetwork.Subnets)).Should(Equal(len(awsConfig.AZs)))
+			})
+
+			It("then each subnet should be configured w/ required fields", func() {
+				for _, v := range privateNetwork.Subnets {
+					Ω(v.Range).ShouldNot(BeEmpty())
+					Ω(v.AZ).ShouldNot(BeEmpty())
+					Ω(v.Gateway).ShouldNot(BeEmpty())
+					Ω(v.DNS).ShouldNot(BeEmpty())
+				}
 			})
 		})
 	})
