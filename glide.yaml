@@ -6,3 +6,4 @@ import:
 - package: github.com/onsi/ginkgo
 - package: github.com/onsi/gomega
 - package: github.com/codegangsta/cli
+- package: github.com/xchapter7x/lo
