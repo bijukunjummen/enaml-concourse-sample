@@ -81,14 +81,24 @@ var _ = Describe("given CloudConfig Deployment for AWS", func() {
 	})
 
 	Context("when a user of the iaas would like to assign disk", func() {
-		XIt("then they should have the option of a small capacity configurations", func() {
-			Ω(0).Should(Equal(1))
+		It("then all disk types should be properly configured", func() {
+			for _, v := range awsConfig.DiskTypes {
+				Ω(v.Name).ShouldNot(BeEmpty())
+				Ω(v.DiskSize).Should(BeNumerically(">", 0))
+				Ω(v.CloudProperties).ShouldNot(BeNil())
+			}
 		})
-		XIt("then they should have the option of a medium capacity configurations", func() {
-			Ω(0).Should(Equal(1))
+		It("then they should have the option of a small capacity configuration", func() {
+			err := checkDiskTypeExists(awsConfig.DiskTypes, DiskSmallName)
+			Ω(err).ShouldNot(HaveOccurred())
 		})
-		XIt("then they should have the option of a large capacity configurations", func() {
-			Ω(0).Should(Equal(1))
+		It("then they should have the option of a medium capacity configuration", func() {
+			err := checkDiskTypeExists(awsConfig.DiskTypes, DiskMediumName)
+			Ω(err).ShouldNot(HaveOccurred())
+		})
+		It("then they should have the option of a large capacity configuration", func() {
+			err := checkDiskTypeExists(awsConfig.DiskTypes, DiskLargeName)
+			Ω(err).ShouldNot(HaveOccurred())
 		})
 	})
 
@@ -165,4 +175,15 @@ func checkUniqueAZs(azs []enaml.AZ) error {
 		exists[awsAZ] = 1
 	}
 	return nil
+}
+
+func checkDiskTypeExists(dsk []enaml.DiskType, name string) (err error) {
+	err = errors.New(name + " capacity configuration not found")
+	for _, v := range dsk {
+		if v.Name == name {
+			err = nil
+			break
+		}
+	}
+	return
 }

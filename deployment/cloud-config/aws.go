@@ -6,13 +6,17 @@ import (
 )
 
 const (
+	DefaultDiskType         = "gp2"
+	DiskSmallName           = "small"
+	DiskMediumName          = "medium"
+	DiskLargeName           = "large"
 	SmallVMName             = "small"
 	SmallVMSize             = "t2.micro"
 	MediumVMName            = "medium"
 	MediumVMSize            = "m3.medium"
-	MediumDiskType          = "gp2"
+	MediumDiskType          = DefaultDiskType
 	MediumEphemeralDiskSize = 30000
-	SmallDiskType           = "gp2"
+	SmallDiskType           = DefaultDiskType
 	SmallEphemeralDiskSize  = 3000
 	AZ1Name                 = "z1"
 	AZ2Name                 = "z2"
@@ -65,7 +69,18 @@ func AddAZs(cfg *enaml.CloudConfigManifest) {
 }
 
 func AddDisk(cfg *enaml.CloudConfigManifest) {
+	cfg.AddDiskType(createDiskType(DiskSmallName, 3000, DefaultDiskType))
+	cfg.AddDiskType(createDiskType(DiskMediumName, 20000, DefaultDiskType))
+	cfg.AddDiskType(createDiskType(DiskLargeName, 50000, DefaultDiskType))
+}
 
+func createDiskType(name string, size int, typename string) enaml.DiskType {
+	return enaml.DiskType{
+		Name:     name,
+		DiskSize: size,
+		CloudProperties: awscloudproperties.EphemeralDisk{
+			DiskType: typename,
+		}}
 }
 
 func AddNetwork(cfg *enaml.CloudConfigManifest) {
