@@ -15,7 +15,8 @@ enaml="./concourse generate --output-filename concourse-cloudconfig.yml \
   --web-vm-type small \
   --worker-vm-type medium \
   --database-vm-type medium \
-  --database-storage-type medium"
+  --database-storage-type medium \
+  --cloud-config-yml cloud-config.yml"
 
 echo "Running $enaml"
 eval $enaml

@@ -56,6 +56,7 @@ const (
 	concourseWorkerVMType        string = "WORKER_VM_TYPE"
 	concourseDatabaseStorageType string = "DATABASE_STORAGE_TYPE"
 	concoursePostgresqlDbPwd     string = "POSTGRESQL_DB_PWD"
+	cloudConfigYml               string = "CLOUD_CONFIG_YML"
 )
 
 func getFlag(input string) (flag string) {
@@ -152,6 +153,10 @@ func generateFlags() (flags []cli.Flag) {
 			Desc:   "database storage type reference from cloudConfig",
 			EnvVar: concourseDatabaseStorageType,
 		},
+		cloudConfigYml: flagBucket{
+			Desc:   "location of cloud config yml",
+			EnvVar: cloudConfigYml,
+		},
 	}
 	for _, v := range flagList {
 		if v.StringSlice {
@@ -234,6 +239,7 @@ func generate(c *cli.Context) {
 	deployment.WorkerVMType = c.String(getFlag(concourseWorkerVMType))
 	deployment.DatabaseVMType = c.String(getFlag(concourseDatabaseVMType))
 	deployment.DatabaseStorageType = c.String(getFlag(concourseDatabaseStorageType))
+	deployment.CloudConfigYml = c.String(getFlag(cloudConfigYml))
 
 	var yamlString string
 	var err error
