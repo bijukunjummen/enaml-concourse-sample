@@ -2,6 +2,9 @@ package concourse
 
 import (
 	"fmt"
+	"io/ioutil"
+
+	"gopkg.in/yaml.v2"
 
 	"github.com/xchapter7x/enaml"
 	"github.com/xchapter7x/enaml-concourse-sample/deployment/concourse/enaml-gen/atc"
@@ -42,12 +45,65 @@ type Deployment struct {
 	WorkerVMType        string
 	DatabaseVMType      string
 	DatabaseStorageType string
+	CloudConfigYml      string
 }
 
 //NewDeployment -
 func NewDeployment() (d Deployment) {
 	d = Deployment{}
 	d.manifest = new(enaml.DeploymentManifest)
+	return
+}
+
+func (d *Deployment) doCloudConfigValidation() (err error) {
+	var data []byte
+	if data, err = ioutil.ReadFile(d.CloudConfigYml); err == nil {
+		c := &enaml.CloudConfigManifest{}
+		if err := yaml.Unmarshal(data, c); err != nil {
+			return err
+		}
+
+		for _, azName := range d.WebAZs {
+			if !c.ContainsAZName(azName) {
+				err = fmt.Errorf("WebAZ [%s] is not defined as a AZ in cloud config", azName)
+				return
+			}
+		}
+		for _, azName := range d.WorkerAZs {
+			if !c.ContainsAZName(azName) {
+				err = fmt.Errorf("WorkerAZ[%s] is not defined as a AZ in cloud config", azName)
+				return
+			}
+		}
+		for _, azName := range d.DatabaseAZs {
+			if !c.ContainsAZName(azName) {
+				err = fmt.Errorf("DatabaseAZ[%s] is not defined as a AZ in cloud config", azName)
+				return
+			}
+		}
+
+		if !c.ContainsVMType(d.WebVMType) {
+			err = fmt.Errorf("WebVMType[%s] is not defined as a VMType in cloud config", d.WebVMType)
+			return
+		}
+		if !c.ContainsVMType(d.WorkerVMType) {
+			err = fmt.Errorf("WorkerVMType[%s] is not defined as a VMType in cloud config", d.WorkerVMType)
+			return
+		}
+		if !c.ContainsVMType(d.DatabaseVMType) {
+			err = fmt.Errorf("DatabaseVMType[%s] is not defined as a VMType in cloud config", d.DatabaseVMType)
+			return
+		}
+		if !c.ContainsDiskType(d.DatabaseStorageType) {
+			err = fmt.Errorf("DatabaseStorageType[%s] is not defined as a DiskType in cloud config", d.DatabaseStorageType)
+			return
+		}
+		/*if !c.ContainsDeploymentNetwork(d.NetworkName) {
+			err = fmt.Errorf("NetworkName[%s] is not defined as a VMType in cloud config", d.NetworkName)
+			return
+		}*/
+
+	}
 	return
 }
 
@@ -58,6 +114,13 @@ func (d *Deployment) Initialize() (err error) {
 	/*if !d.isStrongPass(d.ConcoursePassword) {
 		err = fmt.Errorf("Sorry. The given password is too weak")
 	}*/
+
+	if d.CloudConfig && "" == d.CloudConfigYml {
+		err = fmt.Errorf("Must provide cloudConfigYml location")
+		return
+	} else if err = d.doCloudConfigValidation(); err != nil {
+		return
+	}
 
 	var web *enaml.InstanceGroup
 	var db *enaml.InstanceGroup
@@ -242,8 +305,8 @@ func (d *Deployment) CreateNetwork() (network enaml.Network) {
 }
 
 //CreateManualDeploymentNetwork -
-func (d *Deployment) CreateManualDeploymentNetwork(networkName, networkRange, networkGateway string, webIPs []string) (network enaml.ManualNetwork) {
-	network = enaml.ManualNetwork{
+func (d *Deployment) CreateManualDeploymentNetwork(networkName, networkRange, networkGateway string, webIPs []string) (network *enaml.ManualNetwork) {
+	network = &enaml.ManualNetwork{
 		Name: networkName,
 		Type: "manual",
 	}

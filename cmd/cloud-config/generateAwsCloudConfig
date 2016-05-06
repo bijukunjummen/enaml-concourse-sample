@@ -1,0 +1,8 @@
+go build
+enaml="./cloud-config aws --subnet subnet-5f423a06 --subnet subnet-5f423xxx \
+  --availability-zone z1 --availability-zone z2 \
+  --region us-west-1 \
+  --security-group bosh-cwashburn-InternalSecurityGroup-WQAFGW1Z5W0Y"
+
+echo "Running $enaml"
+eval $enaml

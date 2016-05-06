@@ -1,5 +1,5 @@
 hash: 04b9e3d15203c11a058e7030c85b0784a3c81882586fefc1e449b6ef81c89deb
-updated: 2016-04-29T16:09:26.961918577-04:00
+updated: 2016-05-05T16:36:21.920556743-05:00
 imports:
 - name: github.com/codegangsta/cli
   version: 222ec6fb7eb8a3da24cfa4017694ba45e3f1f516
@@ -10,7 +10,7 @@ imports:
 - name: github.com/op/go-logging
   version: 970db520ece77730c7e4724c61121037378659d9
 - name: github.com/xchapter7x/enaml
-  version: 965e8b7ca672e70e6ab0ee52b61ccf4668e27d55
+  version: 8611ed7d9aff2d95363949598e83f6999c6e3c25
   subpackages:
   - iaas/vsphere
   - cloudproperties/aws

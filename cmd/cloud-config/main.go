@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
 	"os"
-	"strings"
 
 	"github.com/codegangsta/cli"
 	"github.com/xchapter7x/enaml"
@@ -14,7 +14,13 @@ var (
 	Version string
 )
 
+const (
+	defaultFileName string = "cloud-config.yml"
+)
+
 func main() {
+	var err error
+	var yamlString string
 	app := cli.NewApp()
 	app.Version = Version
 	app.Commands = []cli.Command{
@@ -24,21 +30,22 @@ func main() {
 			Description: "generate a cloud config manifest for AWS",
 			Action: func(c *cli.Context) {
 				region := c.String("region")
-				azList := strings.Split(c.String("availability-zones"), ",")
-				subnetList := strings.Split(c.String("subnets"), ",")
-				securityGroupList := strings.Split(c.String("security-groups"), ",")
+				azList := c.StringSlice("availability-zone")
+				subnetList := c.StringSlice("subnet")
+				securityGroupList := c.StringSlice("security-group")
 
-				if yamlString, err := enaml.Cloud(cloudconfig.NewAWSCloudConfig(region, azList, subnetList, securityGroupList)); err == nil {
-					fmt.Println(yamlString)
+				if yamlString, err = enaml.Cloud(cloudconfig.NewAWSCloudConfig(region, azList, subnetList, securityGroupList)); err == nil {
+					err = ioutil.WriteFile(defaultFileName, []byte(yamlString), 0644)
+					fmt.Println("Generated yaml into", defaultFileName)
 				} else {
-					fmt.Println(err)
+					panic(err)
 				}
 			},
 			Flags: []cli.Flag{
-				cli.StringFlag{Name: "subnets", Usage: "comma separated list of subnet names"},
-				cli.StringFlag{Name: "availability-zones", Usage: "comma separated list of AZ names"},
+				cli.StringSliceFlag{Name: "subnet", Usage: "subnet name"},
+				cli.StringSliceFlag{Name: "availability-zone", Usage: "AZ name"},
 				cli.StringFlag{Name: "region", Usage: "aws region"},
-				cli.StringFlag{Name: "security-groups", Usage: "comma separated list of security groups"},
+				cli.StringSliceFlag{Name: "security-group", Usage: "security group"},
 			},
 		},
 		{
