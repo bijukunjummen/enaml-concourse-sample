@@ -2,7 +2,7 @@
 
 ### please see github.com/enaml-ops/enaml
 
-[![wercker status](https://app.wercker.com/status/2202e209e7cc396a6c3e76a450dfcc8b/s/master "wercker status")](https://app.wercker.com/project/bykey/2202e209e7cc396a6c3e76a450dfcc8b)
+[![wercker status](https://app.wercker.com/status/85f90df7bd344e8ff96dd8c6ca38d1f0/s/master "wercker status")](https://app.wercker.com/project/bykey/85f90df7bd344e8ff96dd8c6ca38d1f0)
 
 yes we can actually build, test, compile, etc our deployments and cloud-configs :)
 
