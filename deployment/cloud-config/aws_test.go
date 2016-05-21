@@ -6,9 +6,9 @@ import (
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-	"github.com/xchapter7x/enaml"
-	. "github.com/xchapter7x/enaml-concourse-sample/deployment/cloud-config"
-	"github.com/xchapter7x/enaml/cloudproperties/aws"
+	"github.com/enaml-ops/enaml"
+	. "github.com/enaml-ops/enaml-concourse-sample/deployment/cloud-config"
+	"github.com/enaml-ops/enaml/cloudproperties/aws"
 )
 
 var _ = Describe("given CloudConfig Deployment for AWS", func() {

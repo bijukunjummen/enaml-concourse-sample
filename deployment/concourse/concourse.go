@@ -6,13 +6,13 @@ import (
 
 	"gopkg.in/yaml.v2"
 
-	"github.com/xchapter7x/enaml"
-	"github.com/xchapter7x/enaml-concourse-sample/deployment/concourse/enaml-gen/atc"
-	"github.com/xchapter7x/enaml-concourse-sample/deployment/concourse/enaml-gen/baggageclaim"
-	"github.com/xchapter7x/enaml-concourse-sample/deployment/concourse/enaml-gen/garden"
-	"github.com/xchapter7x/enaml-concourse-sample/deployment/concourse/enaml-gen/groundcrew"
-	"github.com/xchapter7x/enaml-concourse-sample/deployment/concourse/enaml-gen/postgresql"
-	"github.com/xchapter7x/enaml-concourse-sample/deployment/concourse/enaml-gen/tsa"
+	"github.com/enaml-ops/enaml"
+	"github.com/enaml-ops/enaml-concourse-sample/deployment/concourse/enaml-gen/atc"
+	"github.com/enaml-ops/enaml-concourse-sample/deployment/concourse/enaml-gen/baggageclaim"
+	"github.com/enaml-ops/enaml-concourse-sample/deployment/concourse/enaml-gen/garden"
+	"github.com/enaml-ops/enaml-concourse-sample/deployment/concourse/enaml-gen/groundcrew"
+	"github.com/enaml-ops/enaml-concourse-sample/deployment/concourse/enaml-gen/postgresql"
+	"github.com/enaml-ops/enaml-concourse-sample/deployment/concourse/enaml-gen/tsa"
 )
 
 const (

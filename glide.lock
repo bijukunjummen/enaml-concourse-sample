@@ -9,7 +9,7 @@ imports:
   version: 7ce781ea776b2fd506491011353bded2e40c8467
 - name: github.com/op/go-logging
   version: 970db520ece77730c7e4724c61121037378659d9
-- name: github.com/xchapter7x/enaml
+- name: github.com/enaml-ops/enaml
   version: 8611ed7d9aff2d95363949598e83f6999c6e3c25
   subpackages:
   - iaas/vsphere

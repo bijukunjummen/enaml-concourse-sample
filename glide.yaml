@@ -1,6 +1,6 @@
-package: github.com/xchapter7x/enaml-concourse-sample
+package: github.com/enaml-ops/enaml-concourse-sample
 import:
-- package: github.com/xchapter7x/enaml
+- package: github.com/enaml-ops/enaml
   subpackages:
   - iaas/vsphere
 - package: github.com/onsi/ginkgo

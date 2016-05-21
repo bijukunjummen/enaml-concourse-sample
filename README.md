@@ -1,6 +1,6 @@
 # Sample usage of enaml for deployment manifest creation and maintenance
 
-### please see github.com/xchapter7x/enaml
+### please see github.com/enaml-ops/enaml
 
 [![wercker status](https://app.wercker.com/status/2202e209e7cc396a6c3e76a450dfcc8b/s/master "wercker status")](https://app.wercker.com/project/bykey/2202e209e7cc396a6c3e76a450dfcc8b)
 
@@ -28,8 +28,8 @@ $ ./concourse-deployment > concourse-deployment.yml
 package main
 
 import (
-	"github.com/xchapter7x/enaml"
-	"github.com/xchapter7x/enaml-concourse-sample/releasejobs"
+	"github.com/enaml-ops/enaml"
+	"github.com/enaml-ops/enaml-concourse-sample/releasejobs"
 )
 
 var (

@@ -22,8 +22,8 @@ atc          baggageclaim blackbox     groundcrew   postgresql   tsa
 package concourse
 
 import (
-	"github.com/xchapter7x/enaml"
-	"github.com/xchapter7x/enaml-concourse-sample/deployment/concourse/enaml-gen/atc"
-	"github.com/xchapter7x/enaml-concourse-sample/deployment/concourse/enaml-gen/tsa"
+	"github.com/enaml-ops/enaml"
+	"github.com/enaml-ops/enaml-concourse-sample/deployment/concourse/enaml-gen/atc"
+	"github.com/enaml-ops/enaml-concourse-sample/deployment/concourse/enaml-gen/tsa"
 )
 ```

@@ -3,7 +3,7 @@ package concourse_test
 import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-	. "github.com/xchapter7x/enaml-concourse-sample/deployment/concourse"
+	. "github.com/enaml-ops/enaml-concourse-sample/deployment/concourse"
 )
 
 var _ = Describe("Concourse Deployment", func() {

@@ -6,8 +6,8 @@ import (
 	"os"
 
 	"github.com/codegangsta/cli"
-	"github.com/xchapter7x/enaml"
-	"github.com/xchapter7x/enaml-concourse-sample/deployment/cloud-config"
+	"github.com/enaml-ops/enaml"
+	"github.com/enaml-ops/enaml-concourse-sample/deployment/cloud-config"
 )
 
 var (
