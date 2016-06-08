@@ -59,7 +59,7 @@ func (d *Deployment) doCloudConfigValidation() (err error) {
 	var data []byte
 	if data, err = ioutil.ReadFile(d.CloudConfigYml); err == nil {
 		c := &enaml.CloudConfigManifest{}
-		if err := yaml.Unmarshal(data, c); err != nil {
+		if err = yaml.Unmarshal(data, c); err != nil {
 			return err
 		}
 
@@ -118,8 +118,10 @@ func (d *Deployment) Initialize() (err error) {
 	if d.CloudConfig && "" == d.CloudConfigYml {
 		err = fmt.Errorf("Must provide cloudConfigYml location")
 		return
-	} else if err = d.doCloudConfigValidation(); err != nil {
-		return
+	} else if d.CloudConfig {
+		if err = d.doCloudConfigValidation(); err != nil {
+			return
+		}
 	}
 
 	var web *enaml.InstanceGroup

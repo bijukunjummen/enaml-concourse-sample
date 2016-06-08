@@ -36,3 +36,4 @@ testCoverage
 concourse-bosh-lite.yml
 concourse-cloudconfig.yml
 cloud-config.yml
+.idea/

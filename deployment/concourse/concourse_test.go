@@ -1,9 +1,9 @@
 package concourse_test
 
 import (
+	. "github.com/enaml-ops/enaml-concourse-sample/deployment/concourse"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-	. "github.com/enaml-ops/enaml-concourse-sample/deployment/concourse"
 )
 
 var _ = Describe("Concourse Deployment", func() {
@@ -241,6 +241,18 @@ var _ = Describe("Concourse Deployment", func() {
 			It("then we should error and prompt the user for a better pass", func() {
 				err := deployment.Initialize()
 				Ω(err).ShouldNot(BeNil())
+			})
+		})
+	})
+
+	Describe("Given a new deployment", func() {
+		Context("when calling Initialize with Cloud Config set to false ", func() {
+
+			deployment.ConcoursePassword = "test"
+			deployment.CloudConfig = false
+			It("then the Cloud Config validation should not be performed", func() {
+				err := deployment.Initialize()
+				Ω(err).Should(BeNil())
 			})
 		})
 	})
